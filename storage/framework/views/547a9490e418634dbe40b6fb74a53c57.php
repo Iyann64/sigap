@@ -4,6 +4,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta name="csrf-token" content="<?php echo e(csrf_token()); ?>">
+    <link rel="icon" type="image/png" href="<?php echo e(asset('images/logo website.png')); ?>">
     <title>SIGAP – <?php echo $__env->yieldContent('title', 'Sistem Informasi Gangguan dan Pelaporan'); ?></title>
     <style>
         @import url('https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&family=Nunito:wght@400;500;600;700&display=swap');

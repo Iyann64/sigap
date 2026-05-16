@@ -1,0 +1,156 @@
+@extends('layouts.sigap')
+
+@section('title', 'Input Laporan')
+
+@section('content')
+
+<div class="page-title">
+    <span></span> Input Laporan Kejadian
+</div>
+
+@if(session('success'))
+    <div class="alert alert-success">✅ {{ session('success') }}</div>
+@endif
+@if($errors->any())
+    <div class="alert alert-error">❌ Terdapat kesalahan pada form. Silakan periksa kembali.</div>
+@endif
+
+<div class="card">
+    <form action="{{ route('input.store') }}" method="POST" enctype="multipart/form-data">
+        @csrf
+        <div class="form-grid">
+
+            {{-- Jenis Kejadian --}}
+            <div class="form-group">
+                <label>Jenis Kejadian <span class="req">*</span></label>
+                <select name="jenis_kejadian" class="form-control" required>
+                    <option value="">— Pilih Jenis Kejadian —</option>
+                    <option value="Kebakaran" {{ old('jenis_kejadian') == 'Kebakaran' ? 'selected' : '' }}>Kebakaran</option>
+                    <option value="Kebakaran Hutan" {{ old('jenis_kejadian') == 'Kebakaran Hutan' ? 'selected' : '' }}>Kebakaran Hutan</option>
+                    <option value="Hujan Deras" {{ old('jenis_kejadian') == 'Hujan Deras' ? 'selected' : '' }}>Hujan Deras</option>
+                    <option value="Hujan Lebat" {{ old('jenis_kejadian') == 'Hujan Lebat' ? 'selected' : '' }}>Hujan Lebat</option>
+                    <option value="Kabut Tebal" {{ old('jenis_kejadian') == 'Kabut Tebal' ? 'selected' : '' }}>Kabut Tebal</option>
+                    <option value="Animal Hazard" {{ old('jenis_kejadian') == 'Animal Hazard' ? 'selected' : '' }}>Animal Hazard</option>
+                    <option value="Wildlife Hazard" {{ old('jenis_kejadian') == 'Wildlife Hazard' ? 'selected' : '' }}>Wildlife Hazard</option>
+                    <option value="Bird Strike" {{ old('jenis_kejadian') == 'Bird Strike' ? 'selected' : '' }}>Bird Strike</option>
+                    <option value="Medis Gawat Darurat" {{ old('jenis_kejadian') == 'Medis Gawat Darurat' ? 'selected' : '' }}>Medis Gawat Darurat</option>
+                </select>
+                @error('jenis_kejadian')
+                    <span class="form-hint" style="color:#e53935">{{ $message }}</span>
+                @enderror
+            </div>
+
+            {{-- Kronologi Kejadian --}}
+            <div class="form-group" style="grid-row: span 2;">
+                <label>Kronologi Kejadian <span class="req">*</span></label>
+                <textarea name="kronologi" class="form-control" style="min-height:130px"
+                    placeholder="Masukan uraian singkat tentang kronologi kejadian, penyebab, dan tindakan yang dilakukan"
+                    required>{{ old('kronologi') }}</textarea>
+                @error('kronologi')
+                    <span class="form-hint" style="color:#e53935">{{ $message }}</span>
+                @enderror
+            </div>
+
+            {{-- Lokasi Kejadian --}}
+            <div class="form-group">
+                <label>Lokasi Kejadian <span class="req">*</span></label>
+                <select name="lokasi" class="form-control" required>
+                    <option value="">— Pilih Lokasi —</option>
+                    <option value="Runway" {{ old('lokasi') == 'Runway' ? 'selected' : '' }}>Runway</option>
+                    <option value="Taxiway" {{ old('lokasi') == 'Taxiway' ? 'selected' : '' }}>Taxiway</option>
+                    <option value="Apron" {{ old('lokasi') == 'Apron' ? 'selected' : '' }}>Apron</option>
+                    <option value="Luar Bandara" {{ old('lokasi') == 'Luar Bandara' ? 'selected' : '' }}>Luar Bandara</option>
+                    <option value="Terminal" {{ old('lokasi') == 'Terminal' ? 'selected' : '' }}>Terminal</option>
+                    <option value="Hanggar" {{ old('lokasi') == 'Hanggar' ? 'selected' : '' }}>Hanggar</option>
+                </select>
+                @error('lokasi')
+                    <span class="form-hint" style="color:#e53935">{{ $message }}</span>
+                @enderror
+            </div>
+
+            {{-- Tanggal & Waktu --}}
+            <div class="form-group">
+                <label>Tanggal & Waktu Kejadian <span class="req">*</span></label>
+                <input type="datetime-local" name="tanggal_waktu" class="form-control"
+                    value="{{ old('tanggal_waktu', now()->format('Y-m-d\TH:i')) }}" required>
+                @error('tanggal_waktu')
+                    <span class="form-hint" style="color:#e53935">{{ $message }}</span>
+                @enderror
+            </div>
+
+            {{-- Foto Dokumentasi --}}
+            <div class="form-group">
+                <label>Foto Dokumentasi</label>
+                <div class="file-input-wrapper">
+                    <input type="file" name="foto" accept=".jpg,.jpeg,.png" id="fotoInput">
+                    <div class="file-input-display" id="fotoDisplay">
+                        <span class="file-btn">Pilih File</span>
+                        <span id="fotoName">Tidak ada yang dipilih</span>
+                    </div>
+                </div>
+                <span class="form-hint">Unggah foto dokumentasi kejadian (maks 5MB, format: JPG, PNG)</span>
+                @error('foto')
+                    <span class="form-hint" style="color:#e53935">{{ $message }}</span>
+                @enderror
+            </div>
+
+            {{-- Nama Personel --}}
+            <div class="form-group">
+                <label>Nama Personel <span class="req">*</span></label>
+                <input type="text" name="nama_personel" class="form-control"
+                    placeholder="Masukan nama lengkap"
+                    value="{{ old('nama_personel') }}" required>
+                @error('nama_personel')
+                    <span class="form-hint" style="color:#e53935">{{ $message }}</span>
+                @enderror
+            </div>
+
+            {{-- Regu --}}
+            <div class="form-group">
+                <label>Regu <span class="req">*</span></label>
+                <select name="regu" class="form-control" required>
+                    <option value="">— Pilih Regu —</option>
+                    <option value="Alpha" {{ old('regu') == 'Alpha' ? 'selected' : '' }}>Alpha</option>
+                    <option value="Bravo" {{ old('regu') == 'Bravo' ? 'selected' : '' }}>Bravo</option>
+                    <option value="Charlie" {{ old('regu') == 'Charlie' ? 'selected' : '' }}>Charlie</option>
+                    <option value="Delta" {{ old('regu') == 'Delta' ? 'selected' : '' }}>Delta</option>
+                </select>
+                @error('regu')
+                    <span class="form-hint" style="color:#e53935">{{ $message }}</span>
+                @enderror
+            </div>
+
+            {{-- Shift --}}
+            <div class="form-group">
+                <label>Shift <span class="req">*</span></label>
+                <select name="shift" class="form-control" required>
+                    <option value="">— Pilih Shift —</option>
+                    <option value="Pagi" {{ old('shift') == 'Pagi' ? 'selected' : '' }}>Pagi</option>
+                    <option value="Siang" {{ old('shift') == 'Siang' ? 'selected' : '' }}>Siang</option>
+                    <option value="Malam" {{ old('shift') == 'Malam' ? 'selected' : '' }}>Malam</option>
+                </select>
+                @error('shift')
+                    <span class="form-hint" style="color:#e53935">{{ $message }}</span>
+                @enderror
+            </div>
+
+        </div>
+
+        <div class="form-actions">
+            <a href="{{ route('dashboard') }}" class="btn btn-secondary">Batal</a>
+            <button type="submit" class="btn btn-primary">💾 Simpan Laporan</button>
+        </div>
+    </form>
+</div>
+
+@endsection
+
+@push('scripts')
+<script>
+    // Preview nama file yang dipilih
+    document.getElementById('fotoInput').addEventListener('change', function() {
+        const name = this.files[0] ? this.files[0].name : 'Tidak ada yang dipilih';
+        document.getElementById('fotoName').textContent = name;
+    });
+</script>
+@endpush

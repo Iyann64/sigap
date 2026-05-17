@@ -1,22 +1,20 @@
-@extends('layouts.sigap')
+<?php $__env->startSection('title', 'Grafik'); ?>
 
-@section('title', 'Grafik')
-
-@section('content')
+<?php $__env->startSection('content'); ?>
 <div class="page-title">
     <span></span> Grafik Kejadian
 </div>
 
 <!-- Filter tahun -->
 <div class="card" style="margin-bottom: 20px;">
-    <form method="GET" action="{{ route('grafik') }}" style="display: flex; align-items: center; gap: 12px; flex-wrap: wrap;">
+    <form method="GET" action="<?php echo e(route('grafik')); ?>" style="display: flex; align-items: center; gap: 12px; flex-wrap: wrap;">
         <label style="font-size: 13px; font-weight: 700; color: var(--text-mid);">Filter Tahun:</label>
         <select name="tahun" class="form-control" style="width: 120px;" onchange="this.form.submit();">
-            @for($y = date('Y'); $y >= date('Y') - 5; $y--)
-                <option value="{{ $y }}" {{ (request('tahun', date('Y')) == $y) ? 'selected' : '' }}>{{ $y }}</option>
-            @endfor
+            <?php for($y = date('Y'); $y >= date('Y') - 5; $y--): ?>
+                <option value="<?php echo e($y); ?>" <?php echo e((request('tahun', date('Y')) == $y) ? 'selected' : ''); ?>><?php echo e($y); ?></option>
+            <?php endfor; ?>
         </select>
-        <span style="font-size: 12px; color: var(--text-light);">Menampilkan data tahun {{ request('tahun', date('Y')) }}</span>
+        <span style="font-size: 12px; color: var(--text-light);">Menampilkan data tahun <?php echo e(request('tahun', date('Y'))); ?></span>
     </form>
 </div>
 
@@ -30,31 +28,31 @@
 
 <!-- Summary cards -->
 <div style="display: grid; grid-template-columns: repeat(3, 1fr); gap: 16px; margin-top: 20px;">
-    @php
+    <?php
         $summaryData = $summary ?? [
             ['label' => 'Kebakaran Hutan', 'total' => 18, 'color' => '#4472C4'],
             ['label' => 'Hujan Lebat', 'total' => 24, 'color' => '#F5821F'],
             ['label' => 'Wildlife Hazard', 'total' => 12, 'color' => '#28A745'],
         ];
-    @endphp
-    @foreach($summaryData as $s)
+    ?>
+    <?php $__currentLoopData = $summaryData; $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $s): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); ?>
         <div class="card" style="margin-bottom: 0; display: flex; align-items: center; gap: 14px;">
-            <div style="width: 10px; height: 44px; border-radius: 4px; background: {{ $s['color'] }}; flex-shrink: 0;"></div>
+            <div style="width: 10px; height: 44px; border-radius: 4px; background: <?php echo e($s['color']); ?>; flex-shrink: 0;"></div>
             <div>
-                <div style="font-size: 11.5px; color: var(--text-light); font-weight: 600;">{{ $s['label'] }}</div>
-                <div style="font-family: 'Plus Jakarta Sans', sans-serif; font-size: 26px; font-weight: 800; color: var(--text-dark);">{{ $s['total'] }}</div>
+                <div style="font-size: 11.5px; color: var(--text-light); font-weight: 600;"><?php echo e($s['label']); ?></div>
+                <div style="font-family: 'Plus Jakarta Sans', sans-serif; font-size: 26px; font-weight: 800; color: var(--text-dark);"><?php echo e($s['total']); ?></div>
             </div>
         </div>
-    @endforeach
+    <?php endforeach; $__env->popLoop(); $loop = $__env->getLastLoop(); ?>
 </div>
 
-@endsection
+<?php $__env->stopSection(); ?>
 
-@push('scripts')
+<?php $__env->startPush('scripts'); ?>
 <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.2/dist/chart.umd.min.js"></script>
 <script>
 const chartMonths = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'];
-const chartDatasets = @json($chartDatasets ?? []);
+const chartDatasets = <?php echo json_encode($chartDatasets ?? [], 15, 512) ?>;
 
 document.addEventListener('DOMContentLoaded', function() {
     const ctx = document.getElementById('chartGrafik');
@@ -98,4 +96,6 @@ document.addEventListener('DOMContentLoaded', function() {
     }
 });
 </script>
-@endpush
+<?php $__env->stopPush(); ?>
+
+<?php echo $__env->make('layouts.sigap', array_diff_key(get_defined_vars(), ['__data' => 1, '__path' => 1]))->render(); ?><?php /**PATH C:\Users\arjunabimantara\sigap\resources\views/grafik.blade.php ENDPATH**/ ?>

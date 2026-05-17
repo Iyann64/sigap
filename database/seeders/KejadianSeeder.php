@@ -2,14 +2,22 @@
 
 namespace Database\Seeders;
 
-use Illuminate\Database\Seeder;
 use App\Models\Kejadian;
 use Carbon\Carbon;
+use Illuminate\Database\Seeder;
 
 class KejadianSeeder extends Seeder
 {
     public function run(): void
     {
+        $anggota = \App\Models\User::where('email', 'anggota@sigap.test')->first();
+
+        if (Kejadian::exists()) {
+            $this->command->info('Data kejadian sudah ada, seeder dilewati.');
+
+            return;
+        }
+
         $jenisKejadian = [
             'Kebakaran Hutan',
             'Hujan Deras',
@@ -25,12 +33,18 @@ class KejadianSeeder extends Seeder
         $lokasi = ['Runway', 'Taxiway', 'Apron', 'Luar Bandara', 'Terminal', 'Hanggar'];
 
         $personel = [
-            'Budi Santoso', 'Agus Prayogo', 'Siti Rahayu',
-            'Dedi Kurniawan', 'Rina Wulandari', 'Hendra Pratama',
-            'Yuni Astuti', 'Fajar Nugroho', 'Dewi Lestari',
+            'Budi Santoso',
+            'Agus Prayogo',
+            'Siti Rahayu',
+            'Dedi Kurniawan',
+            'Rina Wulandari',
+            'Hendra Pratama',
+            'Yuni Astuti',
+            'Fajar Nugroho',
+            'Dewi Lestari',
         ];
 
-        $regu  = ['Alpha', 'Bravo', 'Charlie'];
+        $regu = ['Alpha', 'Bravo', 'Charlie'];
         $shift = ['Pagi', 'Siang', 'Malam'];
 
         $kronologiTemplate = [
@@ -41,28 +55,28 @@ class KejadianSeeder extends Seeder
             'Teridentifikasi kondisi berbahaya di %s, koordinasi dengan supervisor dan unit terkait dilakukan segera.',
         ];
 
-        // Generate 50 data dummy
         for ($i = 0; $i < 50; $i++) {
-            $lok    = $lokasi[array_rand($lokasi)];
-            $kron   = sprintf(
+            $lok = $lokasi[array_rand($lokasi)];
+            $kron = sprintf(
                 $kronologiTemplate[array_rand($kronologiTemplate)],
                 $lok
             );
 
             Kejadian::create([
+                'user_id' => $anggota?->id,
                 'jenis_kejadian' => $jenisKejadian[array_rand($jenisKejadian)],
-                'kronologi'      => $kron,
-                'lokasi'         => $lok,
-                'tanggal_waktu'  => Carbon::now()
-                                        ->subDays(rand(0, 365))
-                                        ->setTime(rand(6, 22), rand(0, 59)),
-                'foto'           => null,
-                'nama_personel'  => $personel[array_rand($personel)],
-                'regu'           => $regu[array_rand($regu)],
-                'shift'          => $shift[array_rand($shift)],
+                'kronologi' => $kron,
+                'lokasi' => $lok,
+                'tanggal_waktu' => Carbon::now()
+                    ->subDays(rand(0, 365))
+                    ->setTime(rand(6, 22), rand(0, 59)),
+                'foto' => null,
+                'nama_personel' => $personel[array_rand($personel)],
+                'regu' => $regu[array_rand($regu)],
+                'shift' => $shift[array_rand($shift)],
             ]);
         }
 
-        $this->command->info('✅  50 data kejadian berhasil di-seed!');
+        $this->command->info('50 data kejadian berhasil di-seed!');
     }
 }

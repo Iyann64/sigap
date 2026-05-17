@@ -3,18 +3,18 @@
 namespace App\Models;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
+use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Model;
-use Carbon\Carbon;
 
 class Kejadian extends Model
 {
     use HasFactory;
 
-    // Tambahkan ini agar Laravel mencari tabel 'kejadian', bukan 'kejadians'
     protected $table = 'kejadian';
 
     protected $fillable = [
         'jenis_kejadian',
+        'user_id',
         'kronologi',
         'lokasi',
         'tanggal_waktu',
@@ -24,15 +24,18 @@ class Kejadian extends Model
         'shift',
     ];
 
-    // Accessors untuk format tampilan di View
+    protected $casts = [
+        'tanggal_waktu' => 'datetime',
+    ];
+
     public function getTanggalFormatAttribute()
     {
-        return Carbon::parse($this->tanggal_waktu)->translatedFormat('d F Y');
+        return $this->tanggal_waktu->translatedFormat('d F Y');
     }
 
     public function getWaktuFormatAttribute()
     {
-        return Carbon::parse($this->tanggal_waktu)->format('H:i');
+        return $this->tanggal_waktu->format('H:i');
     }
 
     public function getFotoUrlAttribute()
@@ -49,5 +52,10 @@ class Kejadian extends Model
             'Delta'   => 'badge-purple',
             default   => 'badge-secondary',
         };
+    }
+
+    public function user(): BelongsTo
+    {
+        return $this->belongsTo(User::class);
     }
 }

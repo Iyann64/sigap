@@ -5,6 +5,7 @@ namespace Database\Seeders;
 use App\Models\User;
 use Illuminate\Database\Console\Seeds\WithoutModelEvents;
 use Illuminate\Database\Seeder;
+use Illuminate\Support\Facades\Hash;
 
 class DatabaseSeeder extends Seeder
 {
@@ -15,12 +16,26 @@ class DatabaseSeeder extends Seeder
      */
     public function run(): void
     {
-        User::factory()->create([
-            'name' => 'Test User',
-            'email' => 'test@example.com',
+        User::updateOrCreate(['email' => 'admin@sigap.test'], [
+            'name' => 'Admin SIGAP',
+            'password' => Hash::make('password'),
+            'role' => 'admin',
+            'nama_personel' => 'Admin SIGAP',
+            'regu' => null,
+            'shift' => null,
+            'is_active' => true,
         ]);
 
-        // Panggil KejadianSeeder di sini
+        User::updateOrCreate(['email' => 'anggota@sigap.test'], [
+            'name' => 'Anggota SIGAP',
+            'password' => Hash::make('password'),
+            'role' => 'anggota',
+            'nama_personel' => 'Petugas SIGAP',
+            'regu' => 'Alpha',
+            'shift' => 'Pagi',
+            'is_active' => true,
+        ]);
+
         $this->call([
             KejadianSeeder::class,
         ]);

@@ -1,8 +1,6 @@
-@extends('layouts.sigap')
+<?php $__env->startSection('title', 'Dashboard'); ?>
 
-@section('title', 'Dashboard')
-
-@section('content')
+<?php $__env->startSection('content'); ?>
 <div class="page-title">
     <span></span> Dashboard
 </div>
@@ -11,11 +9,11 @@
 <div class="stat-cards">
     <div class="stat-card green">
         <div class="label">Total Kejadian</div>
-        <div class="value">{{ $totalKejadian ?? 125 }}</div>
+        <div class="value"><?php echo e($totalKejadian ?? 125); ?></div>
     </div>
     <div class="stat-card blue">
         <div class="label">Total Kejadian Bulan Ini</div>
-        <div class="value">{{ $totalBulanIni ?? 23 }}</div>
+        <div class="value"><?php echo e($totalBulanIni ?? 23); ?></div>
     </div>
 </div>
 
@@ -39,13 +37,13 @@
             </tr>
         </thead>
         <tbody>
-            @forelse($kejadianTerbaru ?? [] as $item)
+            <?php $__empty_1 = true; $__currentLoopData = $kejadianTerbaru ?? []; $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $item): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); $__empty_1 = false; ?>
                 <tr>
-                    <td>{{ $item->tanggal_waktu->format('d/m/Y') }}</td>
-                    <td>{{ $item->jenis_kejadian }}</td>
-                    <td>{{ Str::limit($item->kronologi, 50) }}</td>
+                    <td><?php echo e($item->tanggal_waktu->format('d/m/Y')); ?></td>
+                    <td><?php echo e($item->jenis_kejadian); ?></td>
+                    <td><?php echo e(Str::limit($item->kronologi, 50)); ?></td>
                 </tr>
-            @empty
+            <?php endforeach; $__env->popLoop(); $loop = $__env->getLastLoop(); if ($__empty_1): ?>
                 <tr>
                     <td>13/04/2024</td>
                     <td>Kebakaran Hutan</td>
@@ -61,13 +59,13 @@
                     <td>Hujan Deras</td>
                     <td>16.47</td>
                 </tr>
-            @endforelse
+            <?php endif; ?>
         </tbody>
     </table>
 </div>
-@endsection
+<?php $__env->stopSection(); ?>
 
-@push('scripts')
+<?php $__env->startPush('scripts'); ?>
 <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.2/dist/chart.umd.min.js"></script>
 <script>
 const chartLabels = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'];
@@ -114,4 +112,6 @@ document.addEventListener('DOMContentLoaded', function() {
     }
 });
 </script>
-@endpush
+<?php $__env->stopPush(); ?>
+
+<?php echo $__env->make('layouts.sigap', array_diff_key(get_defined_vars(), ['__data' => 1, '__path' => 1]))->render(); ?><?php /**PATH C:\Users\arjunabimantara\sigap\resources\views/dashboard.blade.php ENDPATH**/ ?>

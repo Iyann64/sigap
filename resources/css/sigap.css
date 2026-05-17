@@ -29,7 +29,7 @@ body {
     min-height: 100vh;
 }
 
-/* ─── HEADER ─── */
+/* Header */
 .header {
     position: fixed; top: 0; left: 0; right: 0; z-index: 100;
     height: var(--header-h);
@@ -57,14 +57,14 @@ body {
     letter-spacing: 0.5px; margin-top: 1px;
 }
 
-/* ─── LAYOUT ─── */
+/* Layout */
 .layout {
     display: flex;
     padding-top: var(--header-h);
     min-height: 100vh;
 }
 
-/* ─── SIDEBAR ─── */
+/* Sidebar */
 .sidebar {
     position: fixed;
     top: var(--header-h); left: 0; bottom: 0;
@@ -102,7 +102,7 @@ body {
 }
 .sidebar a.active .icon { background: var(--orange); }
 
-/* ─── MAIN CONTENT ─── */
+/* Main content */
 .main {
     margin-left: var(--sidebar-w);
     flex: 1;
@@ -110,7 +110,7 @@ body {
     min-height: calc(100vh - var(--header-h));
 }
 
-/* ─── PAGE HEADER ─── */
+/* Header */
 .page-title {
     font-family: 'Plus Jakarta Sans', sans-serif;
     font-size: 20px; font-weight: 700;
@@ -128,7 +128,7 @@ body {
     margin-right: 10px;
 }
 
-/* ─── STAT CARDS ─── */
+/* Stat cards */
 .stat-cards { display: flex; gap: 16px; margin-bottom: 24px; }
 .stat-card {
     flex: 1; border-radius: var(--radius);
@@ -150,7 +150,7 @@ body {
     margin-top: 4px; line-height: 1;
 }
 
-/* ─── CARD ─── */
+/* Card */
 .card {
     background: #fff;
     border-radius: var(--radius);
@@ -166,7 +166,7 @@ body {
     margin-bottom: 16px;
 }
 
-/* ─── TABLE ─── */
+/* Table */
 table {
     width: 100%; border-collapse: collapse;
     font-size: 13px;
@@ -193,7 +193,7 @@ tbody td {
     margin-bottom: 10px;
 }
 
-/* ─── PAGINATION ─── */
+/* Pagination */
 .pagination {
     display: flex; align-items: center; gap: 6px;
     margin-top: 16px; justify-content: flex-end;
@@ -216,7 +216,7 @@ tbody td {
     font-size: 12px; letter-spacing: 0.3px;
 }
 
-/* ─── FORM ─── */
+/* Form */
 .form-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 18px 24px; }
 .form-grid.full { grid-template-columns: 1fr; }
 .form-group { display: flex; flex-direction: column; gap: 6px; }
@@ -265,7 +265,7 @@ select.form-control { cursor: pointer; appearance: none;
 }
 .form-hint { font-size: 11.5px; color: var(--text-light); margin-top: 3px; }
 
-/* ─── BUTTONS ─── */
+/* Buttons */
 .btn {
     display: inline-flex; align-items: center; gap: 8px;
     padding: 10px 22px;
@@ -284,7 +284,7 @@ select.form-control { cursor: pointer; appearance: none;
 .btn-secondary:hover { background: #e4e9f5; }
 .form-actions { display: flex; gap: 12px; margin-top: 24px; justify-content: flex-end; }
 
-/* ─── BADGE ─── */
+/* Badge */
 .badge {
     display: inline-block; padding: 3px 9px;
     border-radius: 20px; font-size: 11px; font-weight: 700;
@@ -293,10 +293,10 @@ select.form-control { cursor: pointer; appearance: none;
 .badge-orange { background: #fff3e0; color: #e65100; }
 .badge-green  { background: #d1fae5; color: #065f46; }
 
-/* ─── CHART AREA ─── */
+/* Chart area */
 .chart-container { position: relative; width: 100%; height: 240px; }
 
-/* ─── ALERT ─── */
+/* Alert */
 .alert {
     padding: 12px 16px; border-radius: var(--radius);
     font-size: 13.5px; margin-bottom: 16px;
@@ -305,7 +305,7 @@ select.form-control { cursor: pointer; appearance: none;
 .alert-success { background: #d1fae5; color: #065f46; border: 1px solid #a7f3d0; }
 .alert-error   { background: #fee2e2; color: #991b1b; border: 1px solid #fecaca; }
 
-/* ─── SCROLLBAR ─── */
+/* Scrollbar */
 ::-webkit-scrollbar { width: 6px; height: 6px; }
 ::-webkit-scrollbar-track { background: var(--bg); }
 ::-webkit-scrollbar-thumb { background: var(--border); border-radius: 3px; }

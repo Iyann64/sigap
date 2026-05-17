@@ -9,22 +9,20 @@
 </div>
 
 @if(session('success'))
-    <div class="alert alert-success">✅ {{ session('success') }}</div>
+    <div class="alert alert-success">{{ session('success') }}</div>
 @endif
 @if($errors->any())
-    <div class="alert alert-error">❌ Terdapat kesalahan pada form. Silakan periksa kembali.</div>
+    <div class="alert alert-error">Terdapat kesalahan pada form. Silakan periksa kembali.</div>
 @endif
 
 <div class="card">
     <form action="{{ route('input.store') }}" method="POST" enctype="multipart/form-data">
         @csrf
         <div class="form-grid">
-
-            {{-- Jenis Kejadian --}}
             <div class="form-group">
                 <label>Jenis Kejadian <span class="req">*</span></label>
                 <select name="jenis_kejadian" class="form-control" required>
-                    <option value="">— Pilih Jenis Kejadian —</option>
+                    <option value="">-- Pilih Jenis Kejadian --</option>
                     <option value="Kebakaran" {{ old('jenis_kejadian') == 'Kebakaran' ? 'selected' : '' }}>Kebakaran</option>
                     <option value="Kebakaran Hutan" {{ old('jenis_kejadian') == 'Kebakaran Hutan' ? 'selected' : '' }}>Kebakaran Hutan</option>
                     <option value="Hujan Deras" {{ old('jenis_kejadian') == 'Hujan Deras' ? 'selected' : '' }}>Hujan Deras</option>
@@ -40,7 +38,6 @@
                 @enderror
             </div>
 
-            {{-- Kronologi Kejadian --}}
             <div class="form-group" style="grid-row: span 2;">
                 <label>Kronologi Kejadian <span class="req">*</span></label>
                 <textarea name="kronologi" class="form-control" style="min-height:130px"
@@ -51,11 +48,10 @@
                 @enderror
             </div>
 
-            {{-- Lokasi Kejadian --}}
             <div class="form-group">
                 <label>Lokasi Kejadian <span class="req">*</span></label>
                 <select name="lokasi" class="form-control" required>
-                    <option value="">— Pilih Lokasi —</option>
+                    <option value="">-- Pilih Lokasi --</option>
                     <option value="Runway" {{ old('lokasi') == 'Runway' ? 'selected' : '' }}>Runway</option>
                     <option value="Taxiway" {{ old('lokasi') == 'Taxiway' ? 'selected' : '' }}>Taxiway</option>
                     <option value="Apron" {{ old('lokasi') == 'Apron' ? 'selected' : '' }}>Apron</option>
@@ -68,7 +64,6 @@
                 @enderror
             </div>
 
-            {{-- Tanggal & Waktu --}}
             <div class="form-group">
                 <label>Tanggal & Waktu Kejadian <span class="req">*</span></label>
                 <input type="datetime-local" name="tanggal_waktu" class="form-control"
@@ -78,7 +73,6 @@
                 @enderror
             </div>
 
-            {{-- Foto Dokumentasi --}}
             <div class="form-group">
                 <label>Foto Dokumentasi</label>
                 <div class="file-input-wrapper">
@@ -94,7 +88,6 @@
                 @enderror
             </div>
 
-            {{-- Nama Personel --}}
             <div class="form-group">
                 <label>Nama Personel <span class="req">*</span></label>
                 <input type="text" name="nama_personel" class="form-control"
@@ -105,11 +98,10 @@
                 @enderror
             </div>
 
-            {{-- Regu --}}
             <div class="form-group">
                 <label>Regu <span class="req">*</span></label>
                 <select name="regu" class="form-control" required>
-                    <option value="">— Pilih Regu —</option>
+                    <option value="">-- Pilih Regu --</option>
                     <option value="Alpha" {{ old('regu') == 'Alpha' ? 'selected' : '' }}>Alpha</option>
                     <option value="Bravo" {{ old('regu') == 'Bravo' ? 'selected' : '' }}>Bravo</option>
                     <option value="Charlie" {{ old('regu') == 'Charlie' ? 'selected' : '' }}>Charlie</option>
@@ -120,11 +112,10 @@
                 @enderror
             </div>
 
-            {{-- Shift --}}
             <div class="form-group">
                 <label>Shift <span class="req">*</span></label>
                 <select name="shift" class="form-control" required>
-                    <option value="">— Pilih Shift —</option>
+                    <option value="">-- Pilih Shift --</option>
                     <option value="Pagi" {{ old('shift') == 'Pagi' ? 'selected' : '' }}>Pagi</option>
                     <option value="Siang" {{ old('shift') == 'Siang' ? 'selected' : '' }}>Siang</option>
                     <option value="Malam" {{ old('shift') == 'Malam' ? 'selected' : '' }}>Malam</option>
@@ -133,12 +124,11 @@
                     <span class="form-hint" style="color:#e53935">{{ $message }}</span>
                 @enderror
             </div>
-
         </div>
 
         <div class="form-actions">
             <a href="{{ route('dashboard') }}" class="btn btn-secondary">Batal</a>
-            <button type="submit" class="btn btn-primary">💾 Simpan Laporan</button>
+            <button type="submit" class="btn btn-primary">Simpan Laporan</button>
         </div>
     </form>
 </div>
@@ -147,7 +137,6 @@
 
 @push('scripts')
 <script>
-    // Preview nama file yang dipilih
     document.getElementById('fotoInput').addEventListener('change', function() {
         const name = this.files[0] ? this.files[0].name : 'Tidak ada yang dipilih';
         document.getElementById('fotoName').textContent = name;

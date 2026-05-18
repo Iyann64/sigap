@@ -1,5 +1,3 @@
-
-
 <?php $__env->startSection('title', 'Dashboard'); ?>
 
 <?php $__env->startSection('content'); ?>
@@ -41,7 +39,7 @@
         <tbody>
             <?php $__empty_1 = true; $__currentLoopData = $kejadianTerbaru ?? []; $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $item): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); $__empty_1 = false; ?>
                 <tr>
-                    <td><?php echo e(\Carbon\Carbon::parse($item->tanggal_waktu)->format('d/m/Y')); ?></td>
+                    <td><?php echo e($item->tanggal_waktu->format('d/m/Y')); ?></td>
                     <td><?php echo e($item->jenis_kejadian); ?></td>
                     <td><?php echo e(Str::limit($item->kronologi, 50)); ?></td>
                 </tr>
@@ -115,4 +113,5 @@ document.addEventListener('DOMContentLoaded', function() {
 });
 </script>
 <?php $__env->stopPush(); ?>
+
 <?php echo $__env->make('layouts.sigap', array_diff_key(get_defined_vars(), ['__data' => 1, '__path' => 1]))->render(); ?><?php /**PATH C:\laragon\www\sigap\resources\views/dashboard.blade.php ENDPATH**/ ?>

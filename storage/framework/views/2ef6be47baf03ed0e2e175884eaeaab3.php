@@ -4,7 +4,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Login - SIGAP</title>
-    @vite(['resources/css/sigap.css', 'resources/js/app.js'])
+    <?php echo app('Illuminate\Foundation\Vite')(['resources/css/sigap.css', 'resources/js/app.js']); ?>
     <style>
         body {
             display: grid;
@@ -51,21 +51,21 @@
 <body>
     <div class="login-card">
         <div style="text-align: center; margin-bottom: 20px;">
-            <img src="{{ asset('images/logo website.png') }}" alt="Logo SIGAP" style="max-width: 150px; height: auto;">
+            <img src="<?php echo e(asset('images/logo website.png')); ?>" alt="Logo SIGAP" style="max-width: 150px; height: auto;">
         </div>
         <div class="login-title">SIGAP</div>
         <div class="login-subtitle">Sistem Informasi Gangguan dan Pelaporan</div>
 
-        @if($errors->any())
+        <?php if($errors->any()): ?>
             <div class="alert alert-error">Email atau password tidak sesuai.</div>
-        @endif
+        <?php endif; ?>
 
-        <form method="POST" action="{{ route('login.store') }}">
-            @csrf
+        <form method="POST" action="<?php echo e(route('login.store')); ?>">
+            <?php echo csrf_field(); ?>
             <div class="form-grid full">
                 <div class="form-group">
                     <label>Email</label>
-                    <input type="email" name="email" value="{{ old('email') }}" class="form-control" required autofocus>
+                    <input type="email" name="email" value="<?php echo e(old('email')); ?>" class="form-control" required autofocus>
                 </div>
 
                 <div class="form-group">
@@ -86,3 +86,4 @@
     </div>
 </body>
 </html>
+<?php /**PATH C:\laragon\www\sigap\resources\views/auth/login.blade.php ENDPATH**/ ?>

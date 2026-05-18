@@ -1,5 +1,3 @@
-
-
 <?php $__env->startSection('title', 'Grafik'); ?>
 
 <?php $__env->startSection('content'); ?>
@@ -54,27 +52,7 @@
 <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.2/dist/chart.umd.min.js"></script>
 <script>
 const chartMonths = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'];
-
-const chartDatasets = [
-    {
-        label: 'Kebakaran Hutan',
-        data: [2, 3, 3, 4, 1, 2, 3, 5, 2, 2, 4, 3],
-        backgroundColor: '#4472C4',
-        borderRadius: 4
-    },
-    {
-        label: 'Hujan Lebat',
-        data: [3, 2, 2, 5, 4, 3, 5, 3, 4, 2, 2, 3],
-        backgroundColor: '#F5821F',
-        borderRadius: 4
-    },
-    {
-        label: 'Wildlife Hazard',
-        data: [1, 2, 2, 2, 3, 1, 2, 3, 2, 2, 2, 2],
-        backgroundColor: '#28A745',
-        borderRadius: 4
-    }
-];
+const chartDatasets = <?php echo json_encode($chartDatasets ?? [], 15, 512) ?>;
 
 document.addEventListener('DOMContentLoaded', function() {
     const ctx = document.getElementById('chartGrafik');
@@ -83,7 +61,12 @@ document.addEventListener('DOMContentLoaded', function() {
             type: 'bar',
             data: {
                 labels: chartMonths,
-                datasets: chartDatasets
+                datasets: chartDatasets.length ? chartDatasets : [{
+                    label: 'Tidak ada data',
+                    data: Array(12).fill(0),
+                    backgroundColor: '#DDE3EE',
+                    borderRadius: 4
+                }]
             },
             options: {
                 responsive: true,

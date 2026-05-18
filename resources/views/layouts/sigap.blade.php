@@ -5,6 +5,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta name="csrf-token" content="{{ csrf_token() }}">
     <link rel="icon" type="image/png" href="{{ asset('images/logo website.png') }}">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <title>SIGAP - @yield('title', 'Sistem Informasi Gangguan dan Pelaporan')</title>
     @vite(['resources/css/sigap.css', 'resources/js/app.js'])
     @stack('styles')
@@ -30,16 +31,16 @@
 <div class="layout">
     <nav class="sidebar">
         <a href="{{ route('dashboard') }}" class="{{ request()->routeIs('dashboard') ? 'active' : '' }}">
-            <span class="icon">D</span> Dashboard
+            <i class="fas fa-chart-line icon"></i> Dashboard
         </a>
         <a href="{{ route('input') }}" class="{{ request()->routeIs('input') ? 'active' : '' }}">
-            <span class="icon">I</span> Input Laporan
+            <i class="fas fa-pen-to-square icon"></i> Input Laporan
         </a>
         <a href="{{ route('data-kejadian') }}" class="{{ request()->routeIs('data-kejadian') ? 'active' : '' }}">
-            <span class="icon">K</span> Data Kejadian
+            <i class="fas fa-database icon"></i> Data Kejadian
         </a>
         <a href="{{ route('grafik') }}" class="{{ request()->routeIs('grafik') ? 'active' : '' }}">
-            <span class="icon">G</span> Grafik
+            <i class="fas fa-chart-bar icon"></i> Grafik
         </a>
     </nav>
 

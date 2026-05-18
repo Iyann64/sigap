@@ -39,7 +39,7 @@ body {
     box-shadow: 0 2px 16px rgba(13,59,140,0.30);
 }
 .header-logo-img {
-    width: 52px; height: 52px;
+    width: 100px; height: 100px;
     object-fit: contain;
     filter: drop-shadow(0 2px 8px rgba(0,0,0,0.30));
     /* Logo berbackground hitam: mix-blend-mode lighten menghilangkan warna gelap */
@@ -98,9 +98,17 @@ body {
     display: flex; align-items: center; justify-content: center;
     border-radius: 6px;
     background: rgba(255,255,255,0.08);
-    font-size: 14px; flex-shrink: 0;
+    font-size: 16px; flex-shrink: 0;
+    color: rgba(255,255,255,0.75);
 }
-.sidebar a.active .icon { background: var(--orange); }
+.sidebar a:hover .icon {
+    background: rgba(255,255,255,0.12);
+    color: #fff;
+}
+.sidebar a.active .icon { 
+    background: var(--orange);
+    color: #fff;
+}
 
 /* Main content */
 .main {

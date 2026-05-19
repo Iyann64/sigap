@@ -111,7 +111,6 @@
                     <option value="Alpha" {{ old('regu') == 'Alpha' ? 'selected' : '' }}>Alpha</option>
                     <option value="Bravo" {{ old('regu') == 'Bravo' ? 'selected' : '' }}>Bravo</option>
                     <option value="Charlie" {{ old('regu') == 'Charlie' ? 'selected' : '' }}>Charlie</option>
-                    <option value="Delta" {{ old('regu') == 'Delta' ? 'selected' : '' }}>Delta</option>
                 </select>
                 @error('regu')
                     <span class="form-hint" style="color:#e53935">{{ $message }}</span>

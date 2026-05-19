@@ -57,6 +57,8 @@
                 <td style="text-align:center">
                     <a href="<?php echo e(route('data-kejadian.show', $item)); ?>"
                        style="color:var(--blue-main); font-size:12px; font-weight:700; text-decoration:none; margin-right:8px;">Detail</a>
+                    <a href="<?php echo e(route('data-kejadian.edit', $item)); ?>"
+                       style="color:var(--orange); font-size:12px; font-weight:700; text-decoration:none; margin-right:8px;">Edit</a>
                     <?php if(auth()->user()->isAdmin()): ?>
                     <form action="<?php echo e(route('data-kejadian.destroy', $item)); ?>" method="POST"
                           style="display:inline"

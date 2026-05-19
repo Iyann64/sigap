@@ -42,6 +42,11 @@
         <a href="{{ route('grafik') }}" class="{{ request()->routeIs('grafik') ? 'active' : '' }}">
             <i class="fas fa-chart-bar icon"></i> Grafik
         </a>
+        @if(auth()->user()->isAdmin())
+        <a href="{{ route('users.index') }}" class="{{ request()->segment(1) == 'users' ? 'active' : '' }}">
+            <i class="fas fa-users icon"></i> Manajemen Anggota
+        </a>
+        @endif
     </nav>
 
     <main class="main">

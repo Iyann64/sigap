@@ -42,6 +42,11 @@
         <a href="<?php echo e(route('grafik')); ?>" class="<?php echo e(request()->routeIs('grafik') ? 'active' : ''); ?>">
             <i class="fas fa-chart-bar icon"></i> Grafik
         </a>
+        <?php if(auth()->user()->isAdmin()): ?>
+        <a href="<?php echo e(route('users.index')); ?>" class="<?php echo e(request()->segment(1) == 'users' ? 'active' : ''); ?>">
+            <i class="fas fa-users icon"></i> Manajemen Anggota
+        </a>
+        <?php endif; ?>
     </nav>
 
     <main class="main">

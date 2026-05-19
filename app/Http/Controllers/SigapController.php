@@ -53,6 +53,35 @@ class SigapController extends Controller
             ->with('success', 'Laporan kejadian berhasil disimpan!');
     }
 
+    public function edit(Kejadian $kejadian)
+    {
+        $this->authorizeKejadianAccess($kejadian);
+        return view('data-kejadian-edit', compact('kejadian'));
+    }
+
+    public function update(StoreKejadianRequest $request, Kejadian $kejadian)
+    {
+        $this->authorizeKejadianAccess($kejadian);
+        $validated = $request->validated();
+
+        if ($validated['jenis_kejadian'] === 'Lain Lain' && $request->filled('custom_jenis_kejadian')) {
+            $validated['jenis_kejadian'] = $validated['custom_jenis_kejadian'];
+        }
+
+        if ($request->hasFile('foto')) {
+            if ($kejadian->foto) {
+                Storage::disk('public')->delete($kejadian->foto);
+            }
+            $validated['foto'] = $request->file('foto')->store('kejadian', 'public');
+        }
+
+        $kejadian->update($validated);
+
+        return redirect()
+            ->route('data-kejadian')
+            ->with('success', 'Laporan kejadian berhasil diperbarui!');
+    }
+
     public function dataKejadian(Request $request)
     {
         $query = $this->kejadianQueryForCurrentUser()->latest('tanggal_waktu');

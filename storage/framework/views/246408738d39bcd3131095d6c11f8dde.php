@@ -30,6 +30,12 @@
                     <option value="Wildlife Hazard" <?php echo e(old('jenis_kejadian') == 'Wildlife Hazard' ? 'selected' : ''); ?>>Wildlife Hazard</option>
                     <option value="Bird Strike" <?php echo e(old('jenis_kejadian') == 'Bird Strike' ? 'selected' : ''); ?>>Bird Strike</option>
                     <option value="Medis Gawat Darurat" <?php echo e(old('jenis_kejadian') == 'Medis Gawat Darurat' ? 'selected' : ''); ?>>Medis Gawat Darurat</option>
+                    
+                    <option value="FOD" <?php echo e(old('jenis_kejadian') == 'FOD' ? 'selected' : ''); ?>>FOD</option>
+                    <option value="Runway Incursion" <?php echo e(old('jenis_kejadian') == 'Runway Incursion' ? 'selected' : ''); ?>>Runway Incursion</option>
+                    <option value="Runway Excursion" <?php echo e(old('jenis_kejadian') == 'Runway Excursion' ? 'selected' : ''); ?>>Runway Excursion</option>
+                    <option value="Ground Collision" <?php echo e(old('jenis_kejadian') == 'Ground Collision' ? 'selected' : ''); ?>>Ground Collision</option>
+                    <option value="Lain Lain" <?php echo e(old('jenis_kejadian') == 'Lain Lain' ? 'selected' : ''); ?>>Lain Lain</option>
                 </select>
                 <?php $__errorArgs = ['jenis_kejadian'];
 $__bag = $errors->getBag($__errorArgs[1] ?? 'default');
@@ -191,6 +197,31 @@ unset($__errorArgs, $__bag); ?>
 
 <?php $__env->startPush('scripts'); ?>
 <script>
+    const jenisKejadianSelect = document.querySelector('select[name="jenis_kejadian"]');
+    const customJenisKejadianGroup = document.getElementById('customJenisKejadianGroup');
+    const customJenisKejadianInput = customJenisKejadianGroup.querySelector('input[name="custom_jenis_kejadian"]');
+
+    function toggleCustomJenisKejadian() {
+        if (jenisKejadianSelect.value === 'Lain Lain') {
+            customJenisKejadianGroup.style.display = 'block';
+            customJenisKejadianInput.setAttribute('required', 'required');
+        } else {
+            customJenisKejadianGroup.style.display = 'none';
+            customJenisKejadianInput.removeAttribute('required');
+            customJenisKejadianInput.value = ''; // Clear value when hidden
+        }
+    }
+
+    // Initial check on page load (useful if old('jenis_kejadian') was 'Lain Lain')
+    document.addEventListener('DOMContentLoaded', function() {
+        toggleCustomJenisKejadian();
+    });
+
+    // Listen for changes on the select box
+    jenisKejadianSelect.addEventListener('change', toggleCustomJenisKejadian);
+
+
+    // Existing script for fotoInput
     document.getElementById('fotoInput').addEventListener('change', function() {
         const name = this.files[0] ? this.files[0].name : 'Tidak ada yang dipilih';
         document.getElementById('fotoName').textContent = name;

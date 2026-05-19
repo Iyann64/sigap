@@ -27,6 +27,11 @@ class KejadianSeeder extends Seeder
             'Wildlife Hazard',
             'Bird Strike',
             'Medis Gawat Darurat',
+            'FOD',
+            'Runway Incursion',
+            'Runway Excursion',
+            'Ground Collision',
+            'Lain Lain',
             'Kebakaran',
         ];
 

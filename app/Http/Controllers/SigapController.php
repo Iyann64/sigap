@@ -35,6 +35,11 @@ class SigapController extends Controller
     {
         $validated = $request->validated();
 
+        // If 'Lain Lain' is selected, use the custom text from custom_jenis_kejadian
+        if ($validated['jenis_kejadian'] === 'Lain Lain' && $request->filled('custom_jenis_kejadian')) {
+            $validated['jenis_kejadian'] = $validated['custom_jenis_kejadian'];
+        }
+
         if ($request->hasFile('foto')) {
             $validated['foto'] = $request->file('foto')->store('kejadian', 'public');
         }

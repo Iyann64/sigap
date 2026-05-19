@@ -142,34 +142,42 @@
 
 @push('scripts')
 <script>
-    const jenisKejadianSelect = document.querySelector('select[name="jenis_kejadian"]');
-    const customJenisKejadianGroup = document.getElementById('customJenisKejadianGroup');
-    const customJenisKejadianInput = customJenisKejadianGroup.querySelector('input[name="custom_jenis_kejadian"]');
+document.addEventListener('DOMContentLoaded', function () {
 
-    function toggleCustomJenisKejadian() {
-        if (jenisKejadianSelect.value === 'Lain Lain') {
-            customJenisKejadianGroup.style.display = 'block';
-            customJenisKejadianInput.setAttribute('required', 'required');
-        } else {
-            customJenisKejadianGroup.style.display = 'none';
-            customJenisKejadianInput.removeAttribute('required');
-            customJenisKejadianInput.value = ''; // Clear value when hidden
-        }
+    // FOTO INPUT
+    const fotoInput = document.getElementById('fotoInput');
+    const fotoName = document.getElementById('fotoName');
+
+    if (fotoInput && fotoName) {
+        fotoInput.addEventListener('change', function () {
+            fotoName.textContent = this.files.length > 0
+                ? this.files[0].name
+                : 'Tidak ada yang dipilih';
+        });
     }
 
-    // Initial check on page load (useful if old('jenis_kejadian') was 'Lain Lain')
-    document.addEventListener('DOMContentLoaded', function() {
+    // JENIS KEJADIAN LAIN-LAIN
+    const jenisKejadianSelect = document.querySelector('select[name="jenis_kejadian"]');
+    const customJenisKejadianGroup = document.getElementById('customJenisKejadianGroup');
+
+    if (jenisKejadianSelect && customJenisKejadianGroup) {
+        const customJenisKejadianInput = customJenisKejadianGroup.querySelector('input[name="custom_jenis_kejadian"]');
+
+        function toggleCustomJenisKejadian() {
+            if (jenisKejadianSelect.value === 'Lain Lain') {
+                customJenisKejadianGroup.style.display = 'block';
+                customJenisKejadianInput?.setAttribute('required', 'required');
+            } else {
+                customJenisKejadianGroup.style.display = 'none';
+                customJenisKejadianInput?.removeAttribute('required');
+                if (customJenisKejadianInput) customJenisKejadianInput.value = '';
+            }
+        }
+
         toggleCustomJenisKejadian();
-    });
+        jenisKejadianSelect.addEventListener('change', toggleCustomJenisKejadian);
+    }
 
-    // Listen for changes on the select box
-    jenisKejadianSelect.addEventListener('change', toggleCustomJenisKejadian);
-
-
-    // Existing script for fotoInput
-    document.getElementById('fotoInput').addEventListener('change', function() {
-        const name = this.files[0] ? this.files[0].name : 'Tidak ada yang dipilih';
-        document.getElementById('fotoName').textContent = name;
-    });
+});
 </script>
 @endpush

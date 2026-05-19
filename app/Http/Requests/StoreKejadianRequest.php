@@ -14,14 +14,15 @@ class StoreKejadianRequest extends FormRequest
     public function rules(): array
     {
         return [
-            'jenis_kejadian' => 'required|string|max:100',
-            'kronologi' => 'required|string',
-            'lokasi' => 'required|string|max:100',
-            'tanggal_waktu' => 'required|date',
+            'jenis_kejadian' => 'required',
+            'kronologi' => 'required',
+            'lokasi' => 'required',
+            'tanggal_waktu' => 'required',
+            'nama_personel' => 'required',
+            'regu' => 'required',
+            'shift' => 'required',
+
             'foto' => 'nullable|image|mimes:jpg,jpeg,png|max:5120',
-            'nama_personel' => 'required|string|max:150',
-            'regu' => 'required|string|max:50',
-            'shift' => 'required|string|max:50',
         ];
     }
 }

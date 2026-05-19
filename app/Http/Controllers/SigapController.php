@@ -17,13 +17,39 @@ class SigapController extends Controller
         $query = $this->kejadianQueryForCurrentUser();
 
         $totalKejadian = (clone $query)->count();
-        $totalBulanIni = (clone $query)->whereMonth('tanggal_waktu', now()->month)
+
+        $totalBulanIni = (clone $query)
+            ->whereMonth('tanggal_waktu', now()->month)
             ->whereYear('tanggal_waktu', $tahun)
             ->count();
-        $kejadianTerbaru = (clone $query)->latest('tanggal_waktu')->take(5)->get();
+
+        $totalTahunIni = (clone $query)
+            ->whereYear('tanggal_waktu', $tahun)
+            ->count();
+
+        // Statistik kategori gangguan
+        $statistikKategori = (clone $query)
+            ->select('jenis_kejadian')
+            ->selectRaw('COUNT(*) as total')
+            ->groupBy('jenis_kejadian')
+            ->orderByDesc('total')
+            ->get();
+
+        $kejadianTerbaru = (clone $query)
+            ->latest('tanggal_waktu')
+            ->take(5)
+            ->get();
+
         $chartData = $this->monthlyCountsForYear($tahun);
 
-        return view('dashboard', compact('totalKejadian', 'totalBulanIni', 'kejadianTerbaru', 'chartData'));
+        return view('dashboard', compact(
+            'totalKejadian',
+            'totalBulanIni',
+            'totalTahunIni',
+            'statistikKategori',
+            'kejadianTerbaru',
+            'chartData'
+        ));
     }
 
     public function input()
@@ -67,6 +93,9 @@ class SigapController extends Controller
         if ($validated['jenis_kejadian'] === 'Lain Lain' && $request->filled('custom_jenis_kejadian')) {
             $validated['jenis_kejadian'] = $validated['custom_jenis_kejadian'];
         }
+
+        // DEBUG FOTO
+        dd($request->file('foto'));
 
         if ($request->hasFile('foto')) {
             if ($kejadian->foto) {

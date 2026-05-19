@@ -1,5 +1,3 @@
-
-
 <?php $__env->startSection('title', 'Manajemen Anggota'); ?>
 
 <?php $__env->startSection('content'); ?>

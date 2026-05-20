@@ -42,6 +42,9 @@
         <a href="<?php echo e(route('grafik')); ?>" class="<?php echo e(request()->routeIs('grafik') ? 'active' : ''); ?>">
             <i class="fas fa-chart-bar icon"></i> Grafik
         </a>
+        <a href="<?php echo e(route('laporan.index')); ?>" class="<?php echo e(request()->routeIs('laporan.*') ? 'active' : ''); ?>">
+            <i class="fas fa-file-alt icon"></i> Laporan
+        </a>
         <?php if(auth()->user()->isAdmin()): ?>
         <a href="<?php echo e(route('users.index')); ?>" class="<?php echo e(request()->segment(1) == 'users' ? 'active' : ''); ?>">
             <i class="fas fa-users icon"></i> Manajemen Anggota

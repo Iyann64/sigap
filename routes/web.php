@@ -4,6 +4,7 @@ use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\AuthController;
 use App\Http\Controllers\UserController;
 use App\Http\Controllers\SigapController;
+use App\Http\Controllers\LaporanController;
 
 /*
 |--------------------------------------------------------------------------
@@ -28,6 +29,9 @@ Route::middleware('auth')->group(function () {
     Route::get('/data-kejadian/{kejadian}', [SigapController::class, 'show'])->name('data-kejadian.show');
     Route::delete('/data-kejadian/{kejadian}', [SigapController::class, 'destroy'])->middleware('admin')->name('data-kejadian.destroy');
     Route::get('/grafik', [SigapController::class, 'grafik'])->name('grafik');
+    Route::get('/laporan', [LaporanController::class, 'index'])->name('laporan.index');
+    Route::get('/laporan/pdf', [LaporanController::class, 'pdf'])->name('laporan.pdf');
+    Route::get('/laporan/excel', [LaporanController::class, 'excel'])->name('laporan.excel');   
 
     Route::middleware('admin')->group(function () {
         Route::resource('users', UserController::class);

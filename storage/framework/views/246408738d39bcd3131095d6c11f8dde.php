@@ -19,7 +19,7 @@
         <div class="form-grid">
             <div class="form-group">
                 <label>Jenis Kejadian <span class="req">*</span></label>
-                <select name="jenis_kejadian" class="form-control" required>
+                <select name="jenis_kejadian" id="jenisGangguanSelect" class="form-control" required>
                     <option value="">-- Pilih Jenis Kejadian --</option>
                     <option value="Kebakaran" <?php echo e(old('jenis_kejadian') == 'Kebakaran' ? 'selected' : ''); ?>>Kebakaran</option>
                     <option value="Kebakaran Hutan" <?php echo e(old('jenis_kejadian') == 'Kebakaran Hutan' ? 'selected' : ''); ?>>Kebakaran Hutan</option>
@@ -37,6 +37,13 @@
                     <option value="Ground Collision" <?php echo e(old('jenis_kejadian') == 'Ground Collision' ? 'selected' : ''); ?>>Ground Collision</option>
                     <option value="Lain Lain" <?php echo e(old('jenis_kejadian') == 'Lain Lain' ? 'selected' : ''); ?>>Lain Lain</option>
                 </select>
+                <div id="customJenisGangguanGroup" style="display:none; margin-top:10px;">
+                    <input type="text"
+                        name="custom_jenis_gangguan"
+                        id="customJenisGangguan"
+                        class="form-control"
+                        placeholder="Masukkan jenis kejadian lainnya">
+                </div>
                 <?php $__errorArgs = ['jenis_kejadian'];
 $__bag = $errors->getBag($__errorArgs[1] ?? 'default');
 if ($__bag->has($__errorArgs[0])) :
@@ -210,27 +217,26 @@ document.addEventListener('DOMContentLoaded', function () {
         });
     }
 
-    // JENIS KEJADIAN LAIN-LAIN
-    const jenisKejadianSelect = document.querySelector('select[name="jenis_kejadian"]');
-    const customJenisKejadianGroup = document.getElementById('customJenisKejadianGroup');
+   // JENIS KEJADIAN LAIN-LAIN
+const jenisGangguanSelect = document.getElementById('jenisGangguanSelect');
+const customJenisGangguanGroup = document.getElementById('customJenisGangguanGroup');
+const customJenisGangguan = document.getElementById('customJenisGangguan');
 
-    if (jenisKejadianSelect && customJenisKejadianGroup) {
-        const customJenisKejadianInput = customJenisKejadianGroup.querySelector('input[name="custom_jenis_kejadian"]');
-
-        function toggleCustomJenisKejadian() {
-            if (jenisKejadianSelect.value === 'Lain Lain') {
-                customJenisKejadianGroup.style.display = 'block';
-                customJenisKejadianInput?.setAttribute('required', 'required');
-            } else {
-                customJenisKejadianGroup.style.display = 'none';
-                customJenisKejadianInput?.removeAttribute('required');
-                if (customJenisKejadianInput) customJenisKejadianInput.value = '';
-            }
+if (jenisGangguanSelect && customJenisGangguanGroup && customJenisGangguan) {
+    function toggleCustomJenisKejadian() {
+        if (jenisGangguanSelect.value === 'Lain Lain') {
+            customJenisGangguanGroup.style.display = 'block';
+            customJenisGangguan.setAttribute('required', 'required');
+        } else {
+            customJenisGangguanGroup.style.display = 'none';
+            customJenisGangguan.removeAttribute('required');
+            customJenisGangguan.value = '';
         }
-
-        toggleCustomJenisKejadian();
-        jenisKejadianSelect.addEventListener('change', toggleCustomJenisKejadian);
     }
+
+    toggleCustomJenisKejadian();
+    jenisGangguanSelect.addEventListener('change', toggleCustomJenisKejadian);
+}
 
 });
 </script>

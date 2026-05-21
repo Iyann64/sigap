@@ -23,59 +23,38 @@
             </div>
 
            <div class="form-group">
-                <label>Jenis Gangguan <span class="req">*</span></label>
+                <label>Jenis Gangguan</label>
 
                 <select name="jenis_kejadian"
                         id="jenisGangguanSelect"
-                        class="form-control"
-                        required>
+                        class="form-control">
 
                     <option value="">-- Pilih Jenis Gangguan --</option>
 
-                    <option value="Kebakaran" {{ old('jenis_kejadian') == 'Kebakaran' ? 'selected' : '' }}>Kebakaran</option>
-
-                    <option value="Kebakaran Hutan" {{ old('jenis_kejadian') == 'Kebakaran Hutan' ? 'selected' : '' }}>Kebakaran Hutan</option>
-
-                    <option value="Hujan Deras" {{ old('jenis_kejadian') == 'Hujan Deras' ? 'selected' : '' }}>Hujan Deras</option>
-
-                    <option value="Hujan Lebat" {{ old('jenis_kejadian') == 'Hujan Lebat' ? 'selected' : '' }}>Hujan Lebat</option>
-
-                    <option value="Kabut Tebal" {{ old('jenis_kejadian') == 'Kabut Tebal' ? 'selected' : '' }}>Kabut Tebal</option>
-
-                    <option value="Animal Hazard" {{ old('jenis_kejadian') == 'Animal Hazard' ? 'selected' : '' }}>Animal Hazard</option>
-
-                    <option value="Wildlife Hazard" {{ old('jenis_kejadian') == 'Wildlife Hazard' ? 'selected' : '' }}>Wildlife Hazard</option>
-
-                    <option value="Bird Strike" {{ old('jenis_kejadian') == 'Bird Strike' ? 'selected' : '' }}>Bird Strike</option>
-
-                    <option value="Medis Gawat Darurat" {{ old('jenis_kejadian') == 'Medis Gawat Darurat' ? 'selected' : '' }}>Medis Gawat Darurat</option>
-
-                    <option value="FOD" {{ old('jenis_kejadian') == 'FOD' ? 'selected' : '' }}>FOD</option>
-
-                    <option value="Runway Incursion" {{ old('jenis_kejadian') == 'Runway Incursion' ? 'selected' : '' }}>Runway Incursion</option>
-
-                    <option value="Runway Excursion" {{ old('jenis_kejadian') == 'Runway Excursion' ? 'selected' : '' }}>Runway Excursion</option>
-
-                    <option value="Ground Collision" {{ old('jenis_kejadian') == 'Ground Collision' ? 'selected' : '' }}>Ground Collision</option>
-
-                    <option value="Lain Lain" {{ old('jenis_kejadian') == 'Lain Lain' ? 'selected' : '' }}>Lain Lain</option>
+                    @foreach($jenisKejadianOptions ?? [] as $jenisKejadian)
+                        <option value="{{ $jenisKejadian }}" {{ request('jenis_kejadian') == $jenisKejadian ? 'selected' : '' }}>
+                            {{ $jenisKejadian }}
+                        </option>
+                    @endforeach
                 </select>
-
-                <div id="customJenisGangguanGroup"
-                    style="display:none; margin-top:10px;">
-
-                    <input type="text"
-                        name="custom_jenis_gangguan"
-                        id="customJenisGangguan"
-                        class="form-control"
-                        placeholder="Masukkan jenis gangguan lainnya">
-                </div>
 
                 @error('jenis_kejadian')
                     <span class="form-hint" style="color:#e53935">
                         {{ $message }}
                     </span>
                 @enderror
+            </div>
+
+            <div class="form-group">
+                <label>Lokasi</label>
+                <select name="lokasi" class="form-control">
+                    <option value="">-- Pilih Lokasi --</option>
+                    @foreach(['Runway', 'Taxiway', 'Apron', 'Terminal'] as $lokasi)
+                        <option value="{{ $lokasi }}" {{ request('lokasi') == $lokasi ? 'selected' : '' }}>
+                            {{ $lokasi }}
+                        </option>
+                    @endforeach
+                </select>
             </div>
 
             <div class="form-group">
@@ -136,28 +115,4 @@
     </table>
 </div>
 
-@push('scripts')
-<script>
-document.addEventListener('DOMContentLoaded', function () {
-    const selectJenis = document.getElementById('jenisGangguanSelect');
-    const customGroup = document.getElementById('customJenisGangguanGroup');
-    const customInput = document.getElementById('customJenisGangguan');
-
-    function cekLainLain() {
-        if (selectJenis.value === 'Lain Lain') {
-            customGroup.style.display = 'block';
-            customInput.required = true;
-            customInput.focus();
-        } else {
-            customGroup.style.display = 'none';
-            customInput.required = false;
-            customInput.value = '';
-        }
-    }
-
-    cekLainLain();
-    selectJenis.addEventListener('change', cekLainLain);
-});
-</script>
-@endpush
 @endsection

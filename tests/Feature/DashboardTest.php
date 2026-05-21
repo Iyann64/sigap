@@ -49,7 +49,7 @@ class DashboardTest extends TestCase
             'shift' => 'Siang',
         ]);
 
-        $response = $this->actingAs($user)->get('/');
+        $response = $this->actingAs($user)->get(route('dashboard'));
 
         $response->assertOk();
         $response->assertSee('[2,0,1,0,0,0,0,0,0,0,0,0]', false);

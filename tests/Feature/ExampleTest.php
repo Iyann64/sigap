@@ -17,7 +17,7 @@ class ExampleTest extends TestCase
     {
         $user = User::factory()->create(['role' => 'anggota', 'is_active' => true]);
 
-        $response = $this->actingAs($user)->get('/');
+        $response = $this->actingAs($user)->get(route('dashboard'));
 
         $response->assertStatus(200);
     }

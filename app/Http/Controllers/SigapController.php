@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Http\Requests\StoreKejadianRequest;
+use App\Models\ActivityLog;
 use App\Models\Kejadian;
 use Illuminate\Http\Request;
 use Illuminate\Support\Collection;
@@ -41,6 +42,9 @@ class SigapController extends Controller
             ->get();
 
         $chartData = $this->monthlyCountsForYear($tahun);
+        $activityLogs = request()->user()->isAdmin()
+            ? ActivityLog::with('user')->latest()->take(15)->get()
+            : collect();
 
         return view('dashboard', compact(
             'totalKejadian',
@@ -48,7 +52,8 @@ class SigapController extends Controller
             'totalTahunIni',
             'statistikKategori',
             'kejadianTerbaru',
-            'chartData'
+            'chartData',
+            'activityLogs'
         ));
     }
 
@@ -72,7 +77,8 @@ class SigapController extends Controller
 
         $validated['user_id'] = $request->user()->id;
 
-        Kejadian::create($validated);
+        $kejadian = Kejadian::create($validated);
+        ActivityLog::record('kejadian.created', 'Membuat laporan kejadian: ' . $kejadian->jenis_kejadian, $kejadian, $request);
 
         return redirect()
             ->route('data-kejadian')
@@ -94,9 +100,6 @@ class SigapController extends Controller
             $validated['jenis_kejadian'] = $validated['custom_jenis_kejadian'];
         }
 
-        // DEBUG FOTO
-        dd($request->file('foto'));
-
         if ($request->hasFile('foto')) {
             if ($kejadian->foto) {
                 Storage::disk('public')->delete($kejadian->foto);
@@ -105,6 +108,7 @@ class SigapController extends Controller
         }
 
         $kejadian->update($validated);
+        ActivityLog::record('kejadian.updated', 'Mengedit laporan kejadian: ' . $kejadian->jenis_kejadian, $kejadian, $request);
 
         return redirect()
             ->route('data-kejadian')
@@ -138,6 +142,8 @@ class SigapController extends Controller
 
     public function destroy(Kejadian $kejadian)
     {
+        ActivityLog::record('kejadian.deleted', 'Menghapus laporan kejadian: ' . $kejadian->jenis_kejadian, $kejadian);
+
         if ($kejadian->foto) {
             Storage::disk('public')->delete($kejadian->foto);
         }

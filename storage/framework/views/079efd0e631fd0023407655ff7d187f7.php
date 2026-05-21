@@ -1,8 +1,6 @@
-@extends('layouts.sigap')
+<?php $__env->startSection('title', 'Dashboard'); ?>
 
-@section('title', 'Dashboard')
-
-@section('content')
+<?php $__env->startSection('content'); ?>
 <div class="page-title">
     <span></span> Dashboard
 </div>
@@ -11,17 +9,17 @@
 <div class="stat-cards">
     <div class="stat-card green">
         <div class="label">Total Kejadian</div>
-        <div class="value">{{ $totalKejadian ?? 0 }}</div>
+        <div class="value"><?php echo e($totalKejadian ?? 0); ?></div>
     </div>
 
     <div class="stat-card blue">
         <div class="label">Total Kejadian Bulan Ini</div>
-        <div class="value">{{ $totalBulanIni ?? 0 }}</div>
+        <div class="value"><?php echo e($totalBulanIni ?? 0); ?></div>
     </div>
 
     <div class="stat-card orange">
         <div class="label">Total Kejadian Tahun Ini</div>
-        <div class="value">{{ $totalTahunIni ?? 0 }}</div>
+        <div class="value"><?php echo e($totalTahunIni ?? 0); ?></div>
     </div>
 </div>
 
@@ -45,20 +43,21 @@
             </tr>
         </thead>
         <tbody>
-            @forelse($statistikKategori ?? [] as $item)
+            <?php $__empty_1 = true; $__currentLoopData = $statistikKategori ?? []; $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $item): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); $__empty_1 = false; ?>
                 <tr>
-                    <td>{{ $item->jenis_kejadian }}</td>
+                    <td><?php echo e($item->jenis_kejadian); ?></td>
                     <td style="text-align:center; font-weight:700;">
-                        {{ $item->total }}
+                        <?php echo e($item->total); ?>
+
                     </td>
                 </tr>
-            @empty
+            <?php endforeach; $__env->popLoop(); $loop = $__env->getLastLoop(); if ($__empty_1): ?>
                 <tr>
                     <td colspan="2" style="text-align:center;">
                         Belum ada data kategori gangguan.
                     </td>
                 </tr>
-            @endforelse
+            <?php endif; ?>
         </tbody>
     </table>
 </div>
@@ -83,24 +82,24 @@
             </tr>
         </thead>
         <tbody>
-            @forelse($kejadianTerbaru ?? [] as $item)
+            <?php $__empty_1 = true; $__currentLoopData = $kejadianTerbaru ?? []; $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $item): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); $__empty_1 = false; ?>
                 <tr>
-                    <td>{{ $item->tanggal_waktu->format('d/m/Y') }}</td>
-                    <td>{{ $item->jenis_kejadian }}</td>
-                    <td>{{ Str::limit($item->kronologi, 50) }}</td>
+                    <td><?php echo e($item->tanggal_waktu->format('d/m/Y')); ?></td>
+                    <td><?php echo e($item->jenis_kejadian); ?></td>
+                    <td><?php echo e(Str::limit($item->kronologi, 50)); ?></td>
                 </tr>
-            @empty
+            <?php endforeach; $__env->popLoop(); $loop = $__env->getLastLoop(); if ($__empty_1): ?>
                 <tr>
                     <td colspan="3" style="text-align:center;">
                         Belum ada data kejadian terbaru.
                     </td>
                 </tr>
-            @endforelse
+            <?php endif; ?>
         </tbody>
     </table>
 </div>
 
-@if(auth()->user()->isAdmin())
+<?php if(auth()->user()->isAdmin()): ?>
 <div class="card">
     <div class="card-title">Aktivitas User Terbaru</div>
     <table>
@@ -113,32 +112,33 @@
             </tr>
         </thead>
         <tbody>
-            @forelse($activityLogs ?? [] as $log)
+            <?php $__empty_1 = true; $__currentLoopData = $activityLogs ?? []; $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $log): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); $__empty_1 = false; ?>
                 <tr>
-                    <td>{{ $log->created_at->format('d/m/Y H:i') }}</td>
+                    <td><?php echo e($log->created_at->format('d/m/Y H:i')); ?></td>
                     <td>
-                        {{ $log->user?->name ?? 'User terhapus' }}
-                        @if($log->user?->role)
-                            <span class="badge badge-blue">{{ $log->user->role }}</span>
-                        @endif
+                        <?php echo e($log->user?->name ?? 'User terhapus'); ?>
+
+                        <?php if($log->user?->role): ?>
+                            <span class="badge badge-blue"><?php echo e($log->user->role); ?></span>
+                        <?php endif; ?>
                     </td>
-                    <td>{{ $log->description }}</td>
-                    <td>{{ $log->ip_address ?? '-' }}</td>
+                    <td><?php echo e($log->description); ?></td>
+                    <td><?php echo e($log->ip_address ?? '-'); ?></td>
                 </tr>
-            @empty
+            <?php endforeach; $__env->popLoop(); $loop = $__env->getLastLoop(); if ($__empty_1): ?>
                 <tr>
                     <td colspan="4" style="text-align:center;">
                         Belum ada aktivitas user.
                     </td>
                 </tr>
-            @endforelse
+            <?php endif; ?>
         </tbody>
     </table>
 </div>
-@endif
-@endsection
+<?php endif; ?>
+<?php $__env->stopSection(); ?>
 
-@push('scripts')
+<?php $__env->startPush('scripts'); ?>
 <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.2/dist/chart.umd.min.js"></script>
 
 <script>
@@ -251,4 +251,6 @@ document.addEventListener('DOMContentLoaded', function () {
 
 });
 </script>
-@endpush
+<?php $__env->stopPush(); ?>
+
+<?php echo $__env->make('layouts.sigap', array_diff_key(get_defined_vars(), ['__data' => 1, '__path' => 1]))->render(); ?><?php /**PATH C:\Users\arjunabimantara\sigap\resources\views/dashboard.blade.php ENDPATH**/ ?>

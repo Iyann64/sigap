@@ -2,7 +2,7 @@
 
 namespace App\Exports;
 
-use App\Models\Kejadian;
+use Illuminate\Support\Collection;
 use Maatwebsite\Excel\Concerns\FromCollection;
 use Maatwebsite\Excel\Concerns\WithHeadings;
 use Maatwebsite\Excel\Concerns\WithMapping;
@@ -13,9 +13,13 @@ use Carbon\Carbon;
 
 class LaporanExport implements FromCollection, WithHeadings, WithMapping, WithStyles, ShouldAutoSize
 {
+    public function __construct(private Collection $laporan)
+    {
+    }
+
     public function collection()
     {
-        return Kejadian::latest('tanggal_waktu')->get();
+        return $this->laporan;
     }
 
     public function headings(): array

@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\ActivityLog;
 use App\Models\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Hash;
@@ -43,7 +44,8 @@ class UserController extends Controller
         $validated['password'] = Hash::make($validated['password']);
         $validated['is_active'] = $request->has('is_active');
 
-        User::create($validated);
+        $user = User::create($validated);
+        ActivityLog::record('user.created', 'Menambahkan user: ' . $user->name, $user, $request);
 
         return redirect()->route('users.index')->with('success', 'Anggota berhasil ditambahkan.');
     }
@@ -74,12 +76,15 @@ class UserController extends Controller
         $validated['is_active'] = $request->has('is_active');
 
         $user->update($validated);
+        ActivityLog::record('user.updated', 'Mengubah data user: ' . $user->name, $user, $request);
 
         return redirect()->route('users.index')->with('success', 'Data anggota berhasil diperbarui.');
     }
 
     public function destroy(User $user)
     {
+        ActivityLog::record('user.deleted', 'Menghapus user: ' . $user->name, $user);
+
         $user->delete();
         return redirect()->route('users.index')->with('success', 'Anggota berhasil dihapus.');
     }

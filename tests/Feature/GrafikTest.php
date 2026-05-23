@@ -43,4 +43,26 @@ class GrafikTest extends TestCase
         $response->assertSee('"label":"Kebakaran"', false);
         $response->assertSee('"data":[2,0,0,0,0,0,0,0,0,0,0,0]', false);
     }
+
+    public function test_grafik_shows_custom_lain_lain_type_as_its_own_label(): void
+    {
+        $user = User::factory()->create(['role' => 'anggota', 'is_active' => true]);
+
+        Kejadian::create([
+            'user_id' => $user->id,
+            'jenis_kejadian' => 'Tumpahan Bahan Bakar',
+            'kronologi' => 'Terdapat tumpahan bahan bakar di apron.',
+            'lokasi' => 'Apron',
+            'tanggal_waktu' => '2026-01-10 08:30:00',
+            'nama_personel' => 'Petugas Test',
+            'regu' => 'Alpha',
+            'shift' => 'Pagi',
+        ]);
+
+        $response = $this->actingAs($user)->get('/grafik?tahun=2026');
+
+        $response->assertOk();
+        $response->assertSee('"label":"Tumpahan Bahan Bakar"', false);
+        $response->assertDontSee('"label":"Lain Lain"', false);
+    }
 }

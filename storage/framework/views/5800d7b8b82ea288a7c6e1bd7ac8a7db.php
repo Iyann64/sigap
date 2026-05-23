@@ -39,11 +39,22 @@
                 </select>
                 <div id="customJenisGangguanGroup" style="display:none; margin-top:10px;">
                     <input type="text"
-                        name="custom_jenis_gangguan"
+                        name="custom_jenis_kejadian"
                         id="customJenisGangguan"
                         class="form-control"
-                        placeholder="Masukkan jenis kejadian lainnya">
+                        placeholder="Masukkan jenis kejadian lainnya"
+                        value="<?php echo e(old('custom_jenis_kejadian')); ?>">
                 </div>
+                <?php $__errorArgs = ['custom_jenis_kejadian'];
+$__bag = $errors->getBag($__errorArgs[1] ?? 'default');
+if ($__bag->has($__errorArgs[0])) :
+if (isset($message)) { $__messageOriginal = $message; }
+$message = $__bag->first($__errorArgs[0]); ?>
+                    <span class="form-hint" style="color:#e53935"><?php echo e($message); ?></span>
+                <?php unset($message);
+if (isset($__messageOriginal)) { $message = $__messageOriginal; }
+endif;
+unset($__errorArgs, $__bag); ?>
                 <?php $__errorArgs = ['jenis_kejadian'];
 $__bag = $errors->getBag($__errorArgs[1] ?? 'default');
 if ($__bag->has($__errorArgs[0])) :
@@ -83,7 +94,26 @@ unset($__errorArgs, $__bag); ?>
                     <option value="Luar Bandara" <?php echo e(old('lokasi') == 'Luar Bandara' ? 'selected' : ''); ?>>Luar Bandara</option>
                     <option value="Terminal" <?php echo e(old('lokasi') == 'Terminal' ? 'selected' : ''); ?>>Terminal</option>
                     <option value="Hanggar" <?php echo e(old('lokasi') == 'Hanggar' ? 'selected' : ''); ?>>Hanggar</option>
+                    <option value="Lain Lain" <?php echo e(old('lokasi') == 'Lain Lain' ? 'selected' : ''); ?>>Lain Lain</option>
                 </select>
+                <div id="customLokasiGroup" style="display:none; margin-top:10px;">
+                    <input type="text"
+                        name="custom_lokasi"
+                        id="customLokasi"
+                        class="form-control"
+                        placeholder="Masukkan lokasi lainnya"
+                        value="<?php echo e(old('custom_lokasi')); ?>">
+                </div>
+                <?php $__errorArgs = ['custom_lokasi'];
+$__bag = $errors->getBag($__errorArgs[1] ?? 'default');
+if ($__bag->has($__errorArgs[0])) :
+if (isset($message)) { $__messageOriginal = $message; }
+$message = $__bag->first($__errorArgs[0]); ?>
+                    <span class="form-hint" style="color:#e53935"><?php echo e($message); ?></span>
+                <?php unset($message);
+if (isset($__messageOriginal)) { $message = $__messageOriginal; }
+endif;
+unset($__errorArgs, $__bag); ?>
                 <?php $__errorArgs = ['lokasi'];
 $__bag = $errors->getBag($__errorArgs[1] ?? 'default');
 if ($__bag->has($__errorArgs[0])) :
@@ -236,7 +266,28 @@ if (jenisGangguanSelect && customJenisGangguanGroup && customJenisGangguan) {
 
     toggleCustomJenisKejadian();
     jenisGangguanSelect.addEventListener('change', toggleCustomJenisKejadian);
-}
+    }
+
+    // LOKASI LAIN-LAIN
+    const lokasiSelect = document.querySelector('select[name="lokasi"]');
+    const customLokasiGroup = document.getElementById('customLokasiGroup');
+    const customLokasi = document.getElementById('customLokasi');
+
+    if (lokasiSelect && customLokasiGroup && customLokasi) {
+        function toggleCustomLokasi() {
+            if (lokasiSelect.value === 'Lain Lain') {
+                customLokasiGroup.style.display = 'block';
+                customLokasi.setAttribute('required', 'required');
+            } else {
+                customLokasiGroup.style.display = 'none';
+                customLokasi.removeAttribute('required');
+                customLokasi.value = '';
+            }
+        }
+
+        toggleCustomLokasi();
+        lokasiSelect.addEventListener('change', toggleCustomLokasi);
+    }
 
 });
 </script>

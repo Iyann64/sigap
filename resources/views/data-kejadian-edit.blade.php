@@ -8,18 +8,40 @@
         <div class="form-grid">
             <div class="form-group">
                 <label>Jenis Kejadian <span class="req">*</span></label>
-                <select name="jenis_kejadian" class="form-control" required>
-                    @php $options = ['Kebakaran', 'Kebakaran Hutan', 'Hujan Deras', 'FOD', 'Runway Incursion', 'Runway Excursion', 'Ground Collision', 'Lain Lain']; @endphp
+                @php
+                    $options = [
+                        'Kebakaran',
+                        'Kebakaran Hutan',
+                        'Hujan Deras',
+                        'Hujan Lebat',
+                        'Kabut Tebal',
+                        'Animal Hazard',
+                        'Wildlife Hazard',
+                        'Bird Strike',
+                        'Medis Gawat Darurat',
+                        'FOD',
+                        'Runway Incursion',
+                        'Runway Excursion',
+                        'Ground Collision',
+                    ];
+                    $selectedJenis = old('jenis_kejadian', in_array($kejadian->jenis_kejadian, $options, true) ? $kejadian->jenis_kejadian : 'Lain Lain');
+                    $customJenis = old('custom_jenis_kejadian', in_array($kejadian->jenis_kejadian, $options, true) ? '' : $kejadian->jenis_kejadian);
+                @endphp
+                <select name="jenis_kejadian" id="jenisKejadianSelect" class="form-control" required>
                     <option value="">-- Pilih Jenis Kejadian --</option>
                     @foreach($options as $opt)
-                        <option value="{{ $opt }}" {{ old('jenis_kejadian', $kejadian->jenis_kejadian) == $opt ? 'selected' : '' }}>{{ $opt }}</option>
+                        <option value="{{ $opt }}" {{ $selectedJenis == $opt ? 'selected' : '' }}>{{ $opt }}</option>
                     @endforeach
+                    <option value="Lain Lain" {{ $selectedJenis == 'Lain Lain' ? 'selected' : '' }}>Lain Lain</option>
                 </select>
             </div>
             
             <div id="customJenisKejadianGroup" class="form-group" style="display:none;">
                 <label>Sebutkan Jenis Kejadian <span class="req">*</span></label>
-                <input type="text" name="custom_jenis_kejadian" class="form-control" value="{{ old('custom_jenis_kejadian') }}">
+                <input type="text" name="custom_jenis_kejadian" id="customJenisKejadian" class="form-control" value="{{ $customJenis }}">
+                @error('custom_jenis_kejadian')
+                    <span class="form-hint" style="color:#e53935">{{ $message }}</span>
+                @enderror
             </div>
 
             <div class="form-group" style="grid-row: span 2;">
@@ -29,11 +51,23 @@
 
             <div class="form-group">
                 <label>Lokasi Kejadian <span class="req">*</span></label>
-                <select name="lokasi" class="form-control" required>
-                    @foreach(['Runway', 'Taxiway', 'Apron', 'Terminal'] as $loc)
-                        <option value="{{ $loc }}" {{ old('lokasi', $kejadian->lokasi) == $loc ? 'selected' : '' }}>{{ $loc }}</option>
+                @php
+                    $lokasiOptions = ['Runway', 'Taxiway', 'Apron', 'Luar Bandara', 'Terminal', 'Hanggar'];
+                    $selectedLokasi = old('lokasi', in_array($kejadian->lokasi, $lokasiOptions, true) ? $kejadian->lokasi : 'Lain Lain');
+                    $customLokasi = old('custom_lokasi', in_array($kejadian->lokasi, $lokasiOptions, true) ? '' : $kejadian->lokasi);
+                @endphp
+                <select name="lokasi" id="lokasiSelect" class="form-control" required>
+                    @foreach($lokasiOptions as $loc)
+                        <option value="{{ $loc }}" {{ $selectedLokasi == $loc ? 'selected' : '' }}>{{ $loc }}</option>
                     @endforeach
+                    <option value="Lain Lain" {{ $selectedLokasi == 'Lain Lain' ? 'selected' : '' }}>Lain Lain</option>
                 </select>
+                <div id="customLokasiGroup" style="display:none; margin-top:10px;">
+                    <input type="text" name="custom_lokasi" id="customLokasi" class="form-control" value="{{ $customLokasi }}" placeholder="Masukkan lokasi lainnya">
+                </div>
+                @error('custom_lokasi')
+                    <span class="form-hint" style="color:#e53935">{{ $message }}</span>
+                @enderror
             </div>
 
             <div class="form-group">
@@ -79,12 +113,36 @@
 
 @push('scripts')
 <script>
-    const select = document.querySelector('select[name="jenis_kejadian"]');
+    const select = document.getElementById('jenisKejadianSelect');
     const customGroup = document.getElementById('customJenisKejadianGroup');
+    const customInput = document.getElementById('customJenisKejadian');
     function checkCustom() {
-        customGroup.style.display = select.value === 'Lain Lain' ? 'block' : 'none';
+        const isCustom = select.value === 'Lain Lain';
+        customGroup.style.display = isCustom ? 'block' : 'none';
+        if (isCustom) {
+            customInput.setAttribute('required', 'required');
+        } else {
+            customInput.removeAttribute('required');
+            customInput.value = '';
+        }
     }
     select.addEventListener('change', checkCustom);
     window.onload = checkCustom;
+
+    const lokasiSelect = document.getElementById('lokasiSelect');
+    const customLokasiGroup = document.getElementById('customLokasiGroup');
+    const customLokasi = document.getElementById('customLokasi');
+    function checkCustomLokasi() {
+        const isCustom = lokasiSelect.value === 'Lain Lain';
+        customLokasiGroup.style.display = isCustom ? 'block' : 'none';
+        if (isCustom) {
+            customLokasi.setAttribute('required', 'required');
+        } else {
+            customLokasi.removeAttribute('required');
+            customLokasi.value = '';
+        }
+    }
+    lokasiSelect.addEventListener('change', checkCustomLokasi);
+    checkCustomLokasi();
 </script>
 @endpush

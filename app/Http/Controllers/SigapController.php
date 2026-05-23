@@ -66,10 +66,7 @@ class SigapController extends Controller
     {
         $validated = $request->validated();
 
-        // If 'Lain Lain' is selected, use the custom text from custom_jenis_kejadian
-        if ($validated['jenis_kejadian'] === 'Lain Lain' && $request->filled('custom_jenis_kejadian')) {
-            $validated['jenis_kejadian'] = $validated['custom_jenis_kejadian'];
-        }
+        $validated = $this->normalizeJenisKejadian($validated);
 
         if ($request->hasFile('foto')) {
             $validated['foto'] = $request->file('foto')->store('kejadian', 'public');
@@ -96,9 +93,7 @@ class SigapController extends Controller
         $this->authorizeKejadianAccess($kejadian);
         $validated = $request->validated();
 
-        if ($validated['jenis_kejadian'] === 'Lain Lain' && $request->filled('custom_jenis_kejadian')) {
-            $validated['jenis_kejadian'] = $validated['custom_jenis_kejadian'];
-        }
+        $validated = $this->normalizeJenisKejadian($validated);
 
         if ($request->hasFile('foto')) {
             if ($kejadian->foto) {
@@ -245,5 +240,20 @@ class SigapController extends Controller
         if (! request()->user()->isAdmin() && $kejadian->user_id !== request()->user()->id) {
             abort(403);
         }
+    }
+
+    private function normalizeJenisKejadian(array $validated): array
+    {
+        if ($validated['jenis_kejadian'] === 'Lain Lain') {
+            $validated['jenis_kejadian'] = trim($validated['custom_jenis_kejadian']);
+        }
+
+        if ($validated['lokasi'] === 'Lain Lain') {
+            $validated['lokasi'] = trim($validated['custom_lokasi']);
+        }
+
+        unset($validated['custom_jenis_kejadian'], $validated['custom_lokasi']);
+
+        return $validated;
     }
 }

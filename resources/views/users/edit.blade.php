@@ -32,7 +32,7 @@
             <div class="form-group">
                 <label>Regu</label>
                 <select name="regu" class="form-control">
-                    @foreach(['Alpha', 'Bravo', 'Charlie', 'Delta'] as $r)
+                    @foreach(['Alpha', 'Bravo', 'Charlie'] as $r)
                         <option value="{{ $r }}" {{ old('regu', $user->regu) == $r ? 'selected' : '' }}>{{ $r }}</option>
                     @endforeach
                 </select>
@@ -40,7 +40,7 @@
             <div class="form-group">
                 <label>Shift</label>
                 <select name="shift" class="form-control">
-                    @foreach(['Pagi', 'Siang', 'Malam'] as $s)
+                    @foreach(['Pagi', 'Malam'] as $s)
                         <option value="{{ $s }}" {{ old('shift', $user->shift) == $s ? 'selected' : '' }}>{{ $s }}</option>
                     @endforeach
                 </select>

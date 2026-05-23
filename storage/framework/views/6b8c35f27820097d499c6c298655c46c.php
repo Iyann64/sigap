@@ -98,6 +98,44 @@
         </tbody>
     </table>
 </div>
+
+<?php if(auth()->user()->isAdmin()): ?>
+<div class="card">
+    <div class="card-title">Aktivitas User Terbaru</div>
+    <table>
+        <thead>
+            <tr>
+                <th>Waktu</th>
+                <th>User</th>
+                <th>Aktivitas</th>
+                <th>IP</th>
+            </tr>
+        </thead>
+        <tbody>
+            <?php $__empty_1 = true; $__currentLoopData = $activityLogs ?? []; $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $log): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); $__empty_1 = false; ?>
+                <tr>
+                    <td><?php echo e($log->created_at->format('d/m/Y H:i')); ?></td>
+                    <td>
+                        <?php echo e($log->user?->name ?? 'User terhapus'); ?>
+
+                        <?php if($log->user?->role): ?>
+                            <span class="badge badge-blue"><?php echo e($log->user->role); ?></span>
+                        <?php endif; ?>
+                    </td>
+                    <td><?php echo e($log->description); ?></td>
+                    <td><?php echo e($log->ip_address ?? '-'); ?></td>
+                </tr>
+            <?php endforeach; $__env->popLoop(); $loop = $__env->getLastLoop(); if ($__empty_1): ?>
+                <tr>
+                    <td colspan="4" style="text-align:center;">
+                        Belum ada aktivitas user.
+                    </td>
+                </tr>
+            <?php endif; ?>
+        </tbody>
+    </table>
+</div>
+<?php endif; ?>
 <?php $__env->stopSection(); ?>
 
 <?php $__env->startPush('scripts'); ?>
@@ -214,4 +252,5 @@ document.addEventListener('DOMContentLoaded', function () {
 });
 </script>
 <?php $__env->stopPush(); ?>
+
 <?php echo $__env->make('layouts.sigap', array_diff_key(get_defined_vars(), ['__data' => 1, '__path' => 1]))->render(); ?><?php /**PATH C:\laragon\www\sigap\resources\views/dashboard.blade.php ENDPATH**/ ?>

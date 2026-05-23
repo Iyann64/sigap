@@ -1,5 +1,3 @@
-
-
 <?php $__env->startSection('title', 'Laporan'); ?>
 
 <?php $__env->startSection('content'); ?>
@@ -23,53 +21,21 @@
             </div>
 
            <div class="form-group">
-                <label>Jenis Gangguan <span class="req">*</span></label>
+                <label>Jenis Gangguan</label>
 
                 <select name="jenis_kejadian"
                         id="jenisGangguanSelect"
-                        class="form-control"
-                        required>
+                        class="form-control">
 
                     <option value="">-- Pilih Jenis Gangguan --</option>
 
-                    <option value="Kebakaran" <?php echo e(old('jenis_kejadian') == 'Kebakaran' ? 'selected' : ''); ?>>Kebakaran</option>
+                    <?php $__currentLoopData = $jenisKejadianOptions ?? []; $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $jenisKejadian): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); ?>
+                        <option value="<?php echo e($jenisKejadian); ?>" <?php echo e(request('jenis_kejadian') == $jenisKejadian ? 'selected' : ''); ?>>
+                            <?php echo e($jenisKejadian); ?>
 
-                    <option value="Kebakaran Hutan" <?php echo e(old('jenis_kejadian') == 'Kebakaran Hutan' ? 'selected' : ''); ?>>Kebakaran Hutan</option>
-
-                    <option value="Hujan Deras" <?php echo e(old('jenis_kejadian') == 'Hujan Deras' ? 'selected' : ''); ?>>Hujan Deras</option>
-
-                    <option value="Hujan Lebat" <?php echo e(old('jenis_kejadian') == 'Hujan Lebat' ? 'selected' : ''); ?>>Hujan Lebat</option>
-
-                    <option value="Kabut Tebal" <?php echo e(old('jenis_kejadian') == 'Kabut Tebal' ? 'selected' : ''); ?>>Kabut Tebal</option>
-
-                    <option value="Animal Hazard" <?php echo e(old('jenis_kejadian') == 'Animal Hazard' ? 'selected' : ''); ?>>Animal Hazard</option>
-
-                    <option value="Wildlife Hazard" <?php echo e(old('jenis_kejadian') == 'Wildlife Hazard' ? 'selected' : ''); ?>>Wildlife Hazard</option>
-
-                    <option value="Bird Strike" <?php echo e(old('jenis_kejadian') == 'Bird Strike' ? 'selected' : ''); ?>>Bird Strike</option>
-
-                    <option value="Medis Gawat Darurat" <?php echo e(old('jenis_kejadian') == 'Medis Gawat Darurat' ? 'selected' : ''); ?>>Medis Gawat Darurat</option>
-
-                    <option value="FOD" <?php echo e(old('jenis_kejadian') == 'FOD' ? 'selected' : ''); ?>>FOD</option>
-
-                    <option value="Runway Incursion" <?php echo e(old('jenis_kejadian') == 'Runway Incursion' ? 'selected' : ''); ?>>Runway Incursion</option>
-
-                    <option value="Runway Excursion" <?php echo e(old('jenis_kejadian') == 'Runway Excursion' ? 'selected' : ''); ?>>Runway Excursion</option>
-
-                    <option value="Ground Collision" <?php echo e(old('jenis_kejadian') == 'Ground Collision' ? 'selected' : ''); ?>>Ground Collision</option>
-
-                    <option value="Lain Lain" <?php echo e(old('jenis_kejadian') == 'Lain Lain' ? 'selected' : ''); ?>>Lain Lain</option>
+                        </option>
+                    <?php endforeach; $__env->popLoop(); $loop = $__env->getLastLoop(); ?>
                 </select>
-
-                <div id="customJenisGangguanGroup"
-                    style="display:none; margin-top:10px;">
-
-                    <input type="text"
-                        name="custom_jenis_gangguan"
-                        id="customJenisGangguan"
-                        class="form-control"
-                        placeholder="Masukkan jenis gangguan lainnya">
-                </div>
 
                 <?php $__errorArgs = ['jenis_kejadian'];
 $__bag = $errors->getBag($__errorArgs[1] ?? 'default');
@@ -84,6 +50,19 @@ $message = $__bag->first($__errorArgs[0]); ?>
 if (isset($__messageOriginal)) { $message = $__messageOriginal; }
 endif;
 unset($__errorArgs, $__bag); ?>
+            </div>
+
+            <div class="form-group">
+                <label>Lokasi</label>
+                <select name="lokasi" class="form-control">
+                    <option value="">-- Pilih Lokasi --</option>
+                    <?php $__currentLoopData = ['Runway', 'Taxiway', 'Apron', 'Terminal']; $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $lokasi): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); ?>
+                        <option value="<?php echo e($lokasi); ?>" <?php echo e(request('lokasi') == $lokasi ? 'selected' : ''); ?>>
+                            <?php echo e($lokasi); ?>
+
+                        </option>
+                    <?php endforeach; $__env->popLoop(); $loop = $__env->getLastLoop(); ?>
+                </select>
             </div>
 
             <div class="form-group">
@@ -122,7 +101,7 @@ unset($__errorArgs, $__bag); ?>
         <tbody>
             <?php $__empty_1 = true; $__currentLoopData = $laporan; $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $item): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); $__empty_1 = false; ?>
                 <tr>
-                    <td><?php echo e($loop->iteration); ?></td>
+                    <td><?php echo e($laporan->firstItem() + $loop->index); ?></td>
                     <td><?php echo e(Str::limit($item->kronologi, 50)); ?></td>
                     <td><?php echo e($item->jenis_kejadian); ?></td>
                     <td><?php echo e($item->lokasi); ?></td>
@@ -143,31 +122,13 @@ unset($__errorArgs, $__bag); ?>
             <?php endif; ?>
         </tbody>
     </table>
+
+    <div style="margin-top: 20px; display:flex; justify-content:center;">
+        <?php echo e($laporan->links()); ?>
+
+    </div>
 </div>
 
-<?php $__env->startPush('scripts'); ?>
-<script>
-document.addEventListener('DOMContentLoaded', function () {
-    const selectJenis = document.getElementById('jenisGangguanSelect');
-    const customGroup = document.getElementById('customJenisGangguanGroup');
-    const customInput = document.getElementById('customJenisGangguan');
-
-    function cekLainLain() {
-        if (selectJenis.value === 'Lain Lain') {
-            customGroup.style.display = 'block';
-            customInput.required = true;
-            customInput.focus();
-        } else {
-            customGroup.style.display = 'none';
-            customInput.required = false;
-            customInput.value = '';
-        }
-    }
-
-    cekLainLain();
-    selectJenis.addEventListener('change', cekLainLain);
-});
-</script>
-<?php $__env->stopPush(); ?>
 <?php $__env->stopSection(); ?>
+
 <?php echo $__env->make('layouts.sigap', array_diff_key(get_defined_vars(), ['__data' => 1, '__path' => 1]))->render(); ?><?php /**PATH C:\laragon\www\sigap\resources\views/laporan/index.blade.php ENDPATH**/ ?>

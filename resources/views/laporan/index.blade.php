@@ -93,7 +93,7 @@
         <tbody>
             @forelse($laporan as $item)
                 <tr>
-                    <td>{{ $loop->iteration }}</td>
+                    <td>{{ $laporan->firstItem() + $loop->index }}</td>
                     <td>{{ Str::limit($item->kronologi, 50) }}</td>
                     <td>{{ $item->jenis_kejadian }}</td>
                     <td>{{ $item->lokasi }}</td>
@@ -113,6 +113,10 @@
             @endforelse
         </tbody>
     </table>
+
+    <div style="margin-top: 20px; display:flex; justify-content:center;">
+        {{ $laporan->links() }}
+    </div>
 </div>
 
 @endsection

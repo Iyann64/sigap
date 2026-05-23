@@ -11,7 +11,7 @@ class LaporanAccessTest extends TestCase
 {
     use RefreshDatabase;
 
-    public function test_anggota_only_sees_own_reports_on_laporan_page(): void
+    public function test_anggota_can_see_all_reports_on_laporan_page(): void
     {
         $anggota = User::factory()->create(['role' => 'anggota', 'is_active' => true]);
         $otherUser = User::factory()->create(['role' => 'anggota', 'is_active' => true]);
@@ -23,7 +23,7 @@ class LaporanAccessTest extends TestCase
 
         $response->assertOk();
         $response->assertSee('Laporan milik user login');
-        $response->assertDontSee('Laporan milik user lain');
+        $response->assertSee('Laporan milik user lain');
     }
 
     public function test_admin_can_see_all_reports_on_laporan_page(): void
@@ -86,7 +86,7 @@ class LaporanAccessTest extends TestCase
 
         $response->assertOk();
         $response->assertSee('Tumpahan Bahan Bakar');
-        $response->assertDontSee('Gangguan Milik User Lain');
+        $response->assertSee('Gangguan Milik User Lain');
     }
 
     private function createKejadian(User $user, string $jenisKejadian, string $kronologi, string $lokasi = 'Runway'): Kejadian

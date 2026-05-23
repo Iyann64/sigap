@@ -45,7 +45,7 @@
         <div class="card">
             <div class="card-title">Foto Dokumentasi</div>
             <img src="<?php echo e($kejadian->foto_url); ?>" alt="Foto Kejadian"
-                 style="width:100%; border-radius:8px; object-fit:cover; max-height:320px;">
+                style="width:100%; border-radius:8px; object-fit:cover; max-height:320px;">
         </div>
         <?php else: ?>
         <div class="card" style="text-align:center; padding:32px; color:var(--text-light);">

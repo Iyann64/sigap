@@ -12,20 +12,25 @@ use Illuminate\Support\Facades\Storage;
 
 class SigapController extends Controller
 {
-    public function dashboard()
+    public function dashboard(Request $request)
     {
-        $tahun = now()->year;
+        $tahun = (int) $request->get('tahun', now()->year);
+        if ($tahun < 2000 || $tahun > now()->year + 5) {
+            $tahun = now()->year;
+        }
+
         $query = $this->kejadianQueryForCurrentUser();
+        $tahunIni = now()->year;
 
         $totalKejadian = (clone $query)->count();
 
         $totalBulanIni = (clone $query)
             ->whereMonth('tanggal_waktu', now()->month)
-            ->whereYear('tanggal_waktu', $tahun)
+            ->whereYear('tanggal_waktu', $tahunIni)
             ->count();
 
         $totalTahunIni = (clone $query)
-            ->whereYear('tanggal_waktu', $tahun)
+            ->whereYear('tanggal_waktu', $tahunIni)
             ->count();
 
         // Statistik kategori gangguan
@@ -43,7 +48,10 @@ class SigapController extends Controller
 
         $chartData = $this->monthlyCountsForYear($tahun);
         $activityLogs = request()->user()->isAdmin()
-            ? ActivityLog::with('user')->latest()->take(15)->get()
+            ? ActivityLog::with('user')
+                ->latest()
+                ->paginate(6, ['*'], 'activity_page')
+                ->withQueryString()
             : collect();
 
         return view('dashboard', compact(
@@ -53,6 +61,7 @@ class SigapController extends Controller
             'statistikKategori',
             'kejadianTerbaru',
             'chartData',
+            'tahun',
             'activityLogs'
         ));
     }
@@ -112,7 +121,13 @@ class SigapController extends Controller
 
     public function dataKejadian(Request $request)
     {
-        $query = $this->kejadianQueryForCurrentUser()->latest('tanggal_waktu');
+        $query = Kejadian::query()->latest('tanggal_waktu');
+        $tahun = (int) $request->get('tahun', now()->year);
+        if ($tahun < 2000 || $tahun > now()->year + 5) {
+            $tahun = now()->year;
+        }
+
+        $query->whereYear('tanggal_waktu', $tahun);
 
         if ($request->filled('search')) {
             $q = $request->search;
@@ -125,13 +140,11 @@ class SigapController extends Controller
 
         $kejadian = $query->paginate(6)->withQueryString();
 
-        return view('data-kejadian', compact('kejadian'));
+        return view('data-kejadian', compact('kejadian', 'tahun'));
     }
 
     public function show(Kejadian $kejadian)
     {
-        $this->authorizeKejadianAccess($kejadian);
-
         return view('data-kejadian-detail', compact('kejadian'));
     }
 
@@ -226,13 +239,7 @@ class SigapController extends Controller
 
     private function kejadianQueryForCurrentUser()
     {
-        $query = Kejadian::query();
-
-        if (! request()->user()->isAdmin()) {
-            $query->where('user_id', request()->user()->id);
-        }
-
-        return $query;
+        return Kejadian::query();
     }
 
     private function authorizeKejadianAccess(Kejadian $kejadian): void

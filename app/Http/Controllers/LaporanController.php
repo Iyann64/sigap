@@ -78,12 +78,6 @@ class LaporanController extends Controller
 
     private function laporanQueryForCurrentUser(Request $request)
     {
-        $query = Kejadian::query();
-
-        if (! $request->user()->isAdmin()) {
-            $query->where('user_id', $request->user()->id);
-        }
-
-        return $query;
+        return Kejadian::query();
     }
 }

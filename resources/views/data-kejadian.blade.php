@@ -19,8 +19,13 @@
             <strong>{{ $kejadian->total() ?? 0 }}</strong>
             data
         </div>
-        <div style="display:flex; gap:10px; align-items:center;">
-            <form method="GET" action="{{ route('data-kejadian') }}" style="display:flex; gap:8px;">
+        <div style="display:flex; gap:10px; align-items:center; flex-wrap:wrap;">
+            <form method="GET" action="{{ route('data-kejadian') }}" style="display:flex; gap:8px; align-items:center; flex-wrap:wrap;">
+                <select name="tahun" class="form-control" style="width:120px;" onchange="this.form.submit();">
+                    @for($y = date('Y'); $y >= date('Y') - 5; $y--)
+                        <option value="{{ $y }}" {{ ($tahun ?? date('Y')) == $y ? 'selected' : '' }}>{{ $y }}</option>
+                    @endfor
+                </select>
                 <input type="text" name="search" value="{{ request('search') }}"
                     class="form-control" style="width:200px"
                     placeholder="Cari kejadian...">
@@ -58,8 +63,10 @@
                 <td style="text-align:center">
                     <a href="{{ route('data-kejadian.show', $item) }}"
                        style="color:var(--blue-main); font-size:12px; font-weight:700; text-decoration:none; margin-right:8px;">Detail</a>
+                    @if(auth()->user()->isAdmin() || $item->user_id === auth()->id())
                     <a href="{{ route('data-kejadian.edit', $item) }}"
                        style="color:var(--orange); font-size:12px; font-weight:700; text-decoration:none; margin-right:8px;">Edit</a>
+                    @endif
                     @if(auth()->user()->isAdmin())
                     <form action="{{ route('data-kejadian.destroy', $item) }}" method="POST"
                           style="display:inline"

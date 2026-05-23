@@ -24,6 +24,7 @@
                 <th>Kronologi</th>
                 <th>Jenis Gangguan</th>
                 <th>Lokasi</th>
+                <th>Dibuat Oleh</th>
                 <th>Tanggal</th>
                 <th>Status</th>
             </tr>
@@ -35,15 +36,17 @@
                     <td><?php echo e($item->kronologi); ?></td>
                     <td><?php echo e($item->jenis_kejadian); ?></td>
                     <td><?php echo e($item->lokasi); ?></td>
+                    <td><?php echo e($item->user?->name ?? 'User terhapus'); ?></td>
                     <td><?php echo e(\Carbon\Carbon::parse($item->tanggal_waktu)->format('d/m/Y H:i')); ?></td>
                     <td>Tercatat</td>
                 </tr>
             <?php endforeach; $__env->popLoop(); $loop = $__env->getLastLoop(); if ($__empty_1): ?>
                 <tr>
-                    <td colspan="6" style="text-align:center;">Data laporan kosong</td>
+                    <td colspan="7" style="text-align:center;">Data laporan kosong</td>
                 </tr>
             <?php endif; ?>
         </tbody>
     </table>
 </body>
-</html><?php /**PATH C:\Users\arjunabimantara\sigap\resources\views/laporan/pdf.blade.php ENDPATH**/ ?>
+</html>
+<?php /**PATH C:\Users\arjunabimantara\sigap\resources\views/laporan/pdf.blade.php ENDPATH**/ ?>

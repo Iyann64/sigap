@@ -17,8 +17,13 @@
             <strong><?php echo e($kejadian->total() ?? 0); ?></strong>
             data
         </div>
-        <div style="display:flex; gap:10px; align-items:center;">
-            <form method="GET" action="<?php echo e(route('data-kejadian')); ?>" style="display:flex; gap:8px;">
+        <div style="display:flex; gap:10px; align-items:center; flex-wrap:wrap;">
+            <form method="GET" action="<?php echo e(route('data-kejadian')); ?>" style="display:flex; gap:8px; align-items:center; flex-wrap:wrap;">
+                <select name="tahun" class="form-control" style="width:120px;" onchange="this.form.submit();">
+                    <?php for($y = date('Y'); $y >= date('Y') - 5; $y--): ?>
+                        <option value="<?php echo e($y); ?>" <?php echo e(($tahun ?? date('Y')) == $y ? 'selected' : ''); ?>><?php echo e($y); ?></option>
+                    <?php endfor; ?>
+                </select>
                 <input type="text" name="search" value="<?php echo e(request('search')); ?>"
                     class="form-control" style="width:200px"
                     placeholder="Cari kejadian...">
@@ -57,8 +62,10 @@
                 <td style="text-align:center">
                     <a href="<?php echo e(route('data-kejadian.show', $item)); ?>"
                        style="color:var(--blue-main); font-size:12px; font-weight:700; text-decoration:none; margin-right:8px;">Detail</a>
+                    <?php if(auth()->user()->isAdmin() || $item->user_id === auth()->id()): ?>
                     <a href="<?php echo e(route('data-kejadian.edit', $item)); ?>"
                        style="color:var(--orange); font-size:12px; font-weight:700; text-decoration:none; margin-right:8px;">Edit</a>
+                    <?php endif; ?>
                     <?php if(auth()->user()->isAdmin()): ?>
                     <form action="<?php echo e(route('data-kejadian.destroy', $item)); ?>" method="POST"
                           style="display:inline"

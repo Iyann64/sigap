@@ -9,12 +9,12 @@ use Barryvdh\DomPDF\Facade\Pdf;
 use App\Exports\LaporanExport;
 use Maatwebsite\Excel\Facades\Excel;
 
-
 class LaporanController extends Controller
 {
     public function index(Request $request)
     {
-        $laporan = $this->filterLaporan($request);
+        $laporan = $this->filterLaporan($request, true);
+
         $jenisKejadianOptions = $this->laporanQueryForCurrentUser($request)
             ->select('jenis_kejadian')
             ->distinct()
@@ -26,7 +26,8 @@ class LaporanController extends Controller
 
     public function pdf(Request $request)
     {
-        $laporan = $this->filterLaporan($request);
+        $laporan = $this->filterLaporan($request, false);
+
         ActivityLog::record('laporan.pdf', 'Mencetak laporan PDF (' . $laporan->count() . ' data).', null, $request);
 
         $pdf = Pdf::loadView('laporan.pdf', compact('laporan'))
@@ -37,7 +38,8 @@ class LaporanController extends Controller
 
     public function excel(Request $request)
     {
-        $laporan = $this->filterLaporan($request);
+        $laporan = $this->filterLaporan($request, false);
+
         ActivityLog::record('laporan.excel', 'Export laporan Excel (' . $laporan->count() . ' data).', null, $request);
 
         return Excel::download(
@@ -46,7 +48,7 @@ class LaporanController extends Controller
         );
     }
 
-    private function filterLaporan(Request $request)
+    private function filterLaporan(Request $request, bool $paginate = false)
     {
         $query = $this->laporanQueryForCurrentUser($request);
 
@@ -65,7 +67,13 @@ class LaporanController extends Controller
             $query->where('lokasi', $request->lokasi);
         }
 
-        return $query->latest('tanggal_waktu')->get();
+        $query->latest('tanggal_waktu');
+
+        if ($paginate) {
+            return $query->paginate(6)->withQueryString();
+        }
+
+        return $query->get();
     }
 
     private function laporanQueryForCurrentUser(Request $request)

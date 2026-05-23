@@ -13,22 +13,26 @@
 <body>
 
 <header class="header">
+    <button type="button" class="mobile-menu-btn" onclick="toggleSidebar()" aria-label="Buka menu">
+        <i class="fas fa-bars"></i>
+    </button>
     <img src="{{ asset('images/logo website.png') }}" alt="Logo SIGAP" class="header-logo-img">
     <div class="header-title">
         <h1>SIGAP</h1>
         <p>Sistem Informasi Gangguan dan Pelaporan</p>
     </div>
     <img src="{{ asset('images/logo website.png') }}" alt="Logo SIGAP" class="header-logo-img">
-    <form method="POST" action="{{ route('logout') }}" style="position:absolute; right:18px; display:flex; align-items:center; gap:10px;">
+    <form method="POST" action="{{ route('logout') }}" class="header-user">
         @csrf
-        <span style="font-size:12px; color:rgba(255,255,255,0.85); font-weight:700;">
+        <span class="header-user-name">
             {{ auth()->user()->name }} ({{ auth()->user()->role }})
         </span>
-        <button type="submit" class="btn btn-secondary" style="padding:7px 12px; box-shadow:none;">Logout</button>
+        <button type="submit" class="btn btn-secondary header-logout">Logout</button>
     </form>
 </header>
 
 <div class="layout">
+    <div id="sidebarOverlay" class="sidebar-overlay" onclick="toggleSidebar()"></div>
     <nav class="sidebar">
         <a href="{{ route('dashboard') }}" class="{{ request()->routeIs('dashboard') ? 'active' : '' }}">
             <i class="fas fa-chart-line icon"></i> Dashboard

@@ -123,10 +123,48 @@ unset($__errorArgs, $__bag); ?>
         </tbody>
     </table>
 
-    <div style="margin-top: 20px; display:flex; justify-content:center;">
-        <?php echo e($laporan->links()); ?>
+    <?php if($laporan->hasPages()): ?>
+
+    <div class="pagination-laporan">
+
+        
+        <?php if($laporan->onFirstPage()): ?>
+            <span class="disabled">&lt;</span>
+        <?php else: ?>
+            <a href="<?php echo e($laporan->previousPageUrl()); ?>">&lt;</a>
+        <?php endif; ?>
+
+        
+        <?php for($page = 1; $page <= $laporan->lastPage(); $page++): ?>
+
+            <?php if($page == $laporan->currentPage()): ?>
+
+                <span class="active">
+                    <?php echo e($page); ?>
+
+                </span>
+
+            <?php else: ?>
+
+                <a href="<?php echo e($laporan->url($page)); ?>">
+                    <?php echo e($page); ?>
+
+                </a>
+
+            <?php endif; ?>
+
+        <?php endfor; ?>
+
+        
+        <?php if($laporan->hasMorePages()): ?>
+            <a href="<?php echo e($laporan->nextPageUrl()); ?>">&gt;</a>
+        <?php else: ?>
+            <span class="disabled">&gt;</span>
+        <?php endif; ?>
 
     </div>
+
+<?php endif; ?>
 </div>
 
 <?php $__env->stopSection(); ?>

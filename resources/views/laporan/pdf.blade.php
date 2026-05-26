@@ -47,21 +47,27 @@
             font-size: 13px;
         }
 
-        table {
+        .laporan-table {
             width: 100%;
             border-collapse: collapse;
         }
 
-        th,
-        td {
+        .laporan-table th,
+        .laporan-table td {
             border: 1px solid #000;
             padding: 6px;
             vertical-align: top;
         }
 
-        th {
+        .laporan-table th {
             background: #eeeeee;
             text-align: center;
+        }
+
+        .foto {
+            width: 70px;
+            height: auto;
+            object-fit: cover;
         }
     </style>
 </head>
@@ -72,11 +78,15 @@
     <table class="header-table">
         <tr>
             <td width="100">
-                <img src="{{ public_path('/images/logo website.png') }}" class="logo">
+                <img
+                    src="{{ public_path('/images/logo website.png') }}"
+                    class="logo">
             </td>
 
             <td class="title-cell">
-                <div class="title">Laporan Kejadian SIGAP</div>
+                <div class="title">
+                    Laporan Kejadian SIGAP
+                </div>
 
                 <div class="subtitle">
                     Sistem Informasi Gangguan dan Pelaporan
@@ -87,11 +97,12 @@
 
     <!-- INFO -->
     <div class="info">
-        Total Laporan: <strong>{{ $laporan->count() }}</strong>
+        Total Laporan:
+        <strong>{{ $laporan->count() }}</strong>
     </div>
 
     <!-- TABLE -->
-    <table>
+    <table class="laporan-table">
         <thead>
             <tr>
                 <th width="35">No</th>
@@ -99,13 +110,24 @@
                 <th width="120">Jenis Gangguan</th>
                 <th width="90">Lokasi</th>
                 <th width="120">Tanggal</th>
+                <th width="90">Foto</th>
                 <th width="80">Status</th>
             </tr>
         </thead>
 
         <tbody>
             @forelse($laporan as $item)
+
+                @php
+                    $fotoPath = null;
+
+                    if ($item->foto) {
+                        $fotoPath = storage_path('app/public/' . $item->foto);
+                    }
+                @endphp
+
                 <tr>
+
                     <td style="text-align:center;">
                         {{ $loop->iteration }}
                     </td>
@@ -127,15 +149,35 @@
                     </td>
 
                     <td style="text-align:center;">
+
+                        @if($fotoPath && file_exists($fotoPath))
+
+                            <img
+                                src="{{ $fotoPath }}"
+                                class="foto">
+
+                        @else
+
+                            Tidak Ada Foto
+
+                        @endif
+
+                    </td>
+
+                    <td style="text-align:center;">
                         Tercatat
                     </td>
+
                 </tr>
+
             @empty
+
                 <tr>
-                    <td colspan="6" style="text-align:center;">
+                    <td colspan="7" style="text-align:center;">
                         Data laporan kosong
                     </td>
                 </tr>
+
             @endforelse
         </tbody>
     </table>

@@ -114,9 +114,46 @@
         </tbody>
     </table>
 
-    <div style="margin-top: 20px; display:flex; justify-content:center;">
-        {{ $laporan->links() }}
+    @if($laporan->hasPages())
+
+    <div class="pagination-laporan">
+
+        {{-- Previous --}}
+        @if($laporan->onFirstPage())
+            <span class="disabled">&lt;</span>
+        @else
+            <a href="{{ $laporan->previousPageUrl() }}">&lt;</a>
+        @endif
+
+        {{-- Nomor halaman --}}
+        @for($page = 1; $page <= $laporan->lastPage(); $page++)
+
+            @if($page == $laporan->currentPage())
+
+                <span class="active">
+                    {{ $page }}
+                </span>
+
+            @else
+
+                <a href="{{ $laporan->url($page) }}">
+                    {{ $page }}
+                </a>
+
+            @endif
+
+        @endfor
+
+        {{-- Next --}}
+        @if($laporan->hasMorePages())
+            <a href="{{ $laporan->nextPageUrl() }}">&gt;</a>
+        @else
+            <span class="disabled">&gt;</span>
+        @endif
+
     </div>
+
+@endif
 </div>
 
 @endsection

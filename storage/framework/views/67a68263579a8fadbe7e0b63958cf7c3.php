@@ -72,7 +72,7 @@
     <table class="header-table">
         <tr>
             <td width="100">
-                <img src="{{ public_path('/images/logo website.png') }}" class="logo">
+                <img src="<?php echo e(public_path('/images/logo website.png')); ?>" class="logo">
             </td>
 
             <td class="title-cell">
@@ -87,7 +87,7 @@
 
     <!-- INFO -->
     <div class="info">
-        Total Laporan: <strong>{{ $laporan->count() }}</strong>
+        Total Laporan: <strong><?php echo e($laporan->count()); ?></strong>
     </div>
 
     <!-- TABLE -->
@@ -104,41 +104,46 @@
         </thead>
 
         <tbody>
-            @forelse($laporan as $item)
+            <?php $__empty_1 = true; $__currentLoopData = $laporan; $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $item): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); $__empty_1 = false; ?>
                 <tr>
                     <td style="text-align:center;">
-                        {{ $loop->iteration }}
+                        <?php echo e($loop->iteration); ?>
+
                     </td>
 
                     <td>
-                        {{ $item->kronologi }}
+                        <?php echo e($item->kronologi); ?>
+
                     </td>
 
                     <td>
-                        {{ $item->jenis_kejadian }}
+                        <?php echo e($item->jenis_kejadian); ?>
+
                     </td>
 
                     <td>
-                        {{ $item->lokasi }}
+                        <?php echo e($item->lokasi); ?>
+
                     </td>
 
                     <td>
-                        {{ \Carbon\Carbon::parse($item->tanggal_waktu)->format('d/m/Y H:i') }}
+                        <?php echo e(\Carbon\Carbon::parse($item->tanggal_waktu)->format('d/m/Y H:i')); ?>
+
                     </td>
 
                     <td style="text-align:center;">
                         Tercatat
                     </td>
                 </tr>
-            @empty
+            <?php endforeach; $__env->popLoop(); $loop = $__env->getLastLoop(); if ($__empty_1): ?>
                 <tr>
                     <td colspan="6" style="text-align:center;">
                         Data laporan kosong
                     </td>
                 </tr>
-            @endforelse
+            <?php endif; ?>
         </tbody>
     </table>
 
 </body>
-</html>
+</html><?php /**PATH C:\laragon\www\sigap\resources\views/laporan/pdf.blade.php ENDPATH**/ ?>

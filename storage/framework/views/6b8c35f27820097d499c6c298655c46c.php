@@ -24,8 +24,18 @@
 </div>
 
 <!-- CHART -->
-<div class="card">
-    <div class="card-title">Grafik Tren Kejadian</div>
+<div id="aktivitas-user" class="card">
+    <div style="display:flex; align-items:center; justify-content:space-between; gap:12px; flex-wrap:wrap; margin-bottom:14px;">
+        <div class="card-title" style="margin-bottom:0;">Grafik Tren Kejadian</div>
+        <form method="GET" action="<?php echo e(route('dashboard')); ?>" style="display:flex; align-items:center; gap:10px; flex-wrap:wrap;">
+            <label style="font-size:13px; font-weight:700; color:var(--text-mid);">Tahun</label>
+            <select name="tahun" class="form-control" style="width:120px;" onchange="this.form.submit();">
+                <?php for($y = date('Y'); $y >= date('Y') - 5; $y--): ?>
+                    <option value="<?php echo e($y); ?>" <?php echo e(($tahun ?? date('Y')) == $y ? 'selected' : ''); ?>><?php echo e($y); ?></option>
+                <?php endfor; ?>
+            </select>
+        </form>
+    </div>
     <div class="chart-container">
         <canvas id="chartTren"></canvas>
     </div>
@@ -101,7 +111,20 @@
 
 <?php if(auth()->user()->isAdmin()): ?>
 <div class="card">
-    <div class="card-title">Aktivitas User Terbaru</div>
+    <div style="display:flex; align-items:center; justify-content:space-between; margin-bottom:16px; gap:12px; flex-wrap:wrap;">
+        <div class="card-title" style="margin-bottom:0;">Aktivitas User Terbaru</div>
+        <?php if(isset($activityLogs) && method_exists($activityLogs, 'total')): ?>
+            <div class="table-meta">
+                Menampilkan
+                <strong><?php echo e($activityLogs->firstItem() ?? 0); ?></strong>
+                sampai
+                <strong><?php echo e($activityLogs->lastItem() ?? 0); ?></strong>
+                dari
+                <strong><?php echo e($activityLogs->total() ?? 0); ?></strong>
+                aktivitas
+            </div>
+        <?php endif; ?>
+    </div>
     <table>
         <thead>
             <tr>
@@ -134,6 +157,12 @@
             <?php endif; ?>
         </tbody>
     </table>
+    <?php if(isset($activityLogs) && method_exists($activityLogs, 'hasPages') && $activityLogs->hasPages()): ?>
+        <div style="margin-top:20px; display:flex; justify-content:center;">
+            <?php echo e($activityLogs->fragment('aktivitas-user')->links()); ?>
+
+        </div>
+    <?php endif; ?>
 </div>
 <?php endif; ?>
 <?php $__env->stopSection(); ?>
@@ -152,6 +181,38 @@ const kategoriLabels = <?php echo json_encode(($statistikKategori ?? collect())-
 const kategoriValues = <?php echo json_encode(($statistikKategori ?? collect())->pluck('total')); ?>;
 
 document.addEventListener('DOMContentLoaded', function () {
+    const activityPanel = document.getElementById('aktivitas-user');
+
+    function scrollToActivityPanel() {
+        if (!activityPanel) {
+            return;
+        }
+
+        const header = document.querySelector('.header');
+        const headerOffset = header ? header.offsetHeight + 16 : 16;
+        const top = activityPanel.getBoundingClientRect().top + window.pageYOffset - headerOffset;
+
+        window.scrollTo({ top, behavior: 'auto' });
+    }
+
+    activityPanel?.querySelectorAll('a[href*="activity_page="]').forEach(function (link) {
+        link.addEventListener('click', function () {
+            sessionStorage.setItem('scrollToActivityPanel', '1');
+        });
+    });
+
+    const shouldScrollToActivity =
+        window.location.hash === '#aktivitas-user'
+        || new URLSearchParams(window.location.search).has('activity_page')
+        || sessionStorage.getItem('scrollToActivityPanel') === '1';
+
+    if (shouldScrollToActivity) {
+        sessionStorage.removeItem('scrollToActivityPanel');
+        window.addEventListener('load', function () {
+            setTimeout(scrollToActivityPanel, 150);
+            setTimeout(scrollToActivityPanel, 500);
+        });
+    }
 
     // BAR CHART
     const ctx = document.getElementById('chartTren');
@@ -162,7 +223,7 @@ document.addEventListener('DOMContentLoaded', function () {
             data: {
                 labels: chartLabels,
                 datasets: [{
-                    label: 'Jumlah Kejadian',
+                    label: "Jumlah Kejadian <?php echo e($tahun ?? date('Y')); ?>",
                     data: chartValues,
                     backgroundColor: '#F5821F',
                     borderRadius: 5,

@@ -97,7 +97,7 @@
             <div class="form-group">
                 <label>Shift <span class="req">*</span></label>
                 <select name="shift" class="form-control" required>
-                    @foreach(['Pagi', 'Siang', 'Malam'] as $s)
+                    @foreach(['Pagi','Malam'] as $s)
                         <option value="{{ $s }}" {{ old('shift', $kejadian->shift) == $s ? 'selected' : '' }}>{{ $s }}</option>
                     @endforeach
                 </select>

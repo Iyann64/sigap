@@ -145,7 +145,6 @@
                 <select name="shift" class="form-control" required>
                     <option value="">-- Pilih Shift --</option>
                     <option value="Pagi" {{ old('shift') == 'Pagi' ? 'selected' : '' }}>Pagi</option>
-                    <option value="Siang" {{ old('shift') == 'Siang' ? 'selected' : '' }}>Siang</option>
                     <option value="Malam" {{ old('shift') == 'Malam' ? 'selected' : '' }}>Malam</option>
                 </select>
                 @error('shift')

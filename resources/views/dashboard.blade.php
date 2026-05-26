@@ -222,7 +222,7 @@ document.addEventListener('DOMContentLoaded', function () {
             data: {
                 labels: chartLabels,
                 datasets: [{
-                    label: 'Jumlah Kejadian {{ $tahun ?? date('Y') }}',
+                    label: "Jumlah Kejadian {{ $tahun ?? date('Y') }}",
                     data: chartValues,
                     backgroundColor: '#F5821F',
                     borderRadius: 5,

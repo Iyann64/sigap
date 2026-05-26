@@ -166,7 +166,21 @@ class SigapController extends Controller
     public function grafik(Request $request)
     {
         $tahun = (int) $request->get('tahun', date('Y'));
-        $colors = ['#4472C4', '#F5821F', '#28A745', '#E53935', '#9C27B0'];
+        $colors = [
+            '#4472C4',
+            '#F5821F',
+            '#28A745',
+            '#E53935',
+            '#9C27B0',
+            '#00ACC1',
+            '#FFC107',
+            '#795548',
+            '#607D8B',
+            '#E91E63',
+            '#009688',
+            '#3F51B5',
+            '#FF5722'
+        ];
 
         $rows = $this->kejadianQueryForCurrentUser()
             ->select('jenis_kejadian')
@@ -182,7 +196,7 @@ class SigapController extends Controller
             ->map(fn (Collection $items) => (int) $items->sum('total'))
             ->sortDesc();
 
-        $jenisKejadianList = $totalsByJenis->keys()->take(5)->values();
+        $jenisKejadianList = $totalsByJenis->keys()->values();
         $rowsByJenis = $rows->groupBy('jenis_kejadian');
 
         $chartDatasets = [];

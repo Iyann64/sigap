@@ -26,11 +26,11 @@ class SigapController extends Controller
 
         $totalBulanIni = (clone $query)
             ->whereMonth('tanggal_waktu', now()->month)
-            ->whereYear('tanggal_waktu', $tahunIni)
+            ->whereYear('tanggal_waktu', $tahun)
             ->count();
 
         $totalTahunIni = (clone $query)
-            ->whereYear('tanggal_waktu', $tahunIni)
+            ->whereYear('tanggal_waktu', $tahun)
             ->count();
 
         // Statistik kategori gangguan

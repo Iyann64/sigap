@@ -111,21 +111,31 @@
 </div>
 
 @if(auth()->user()->isAdmin())
-<div class="card">
-    <div style="display:flex; align-items:center; justify-content:space-between; margin-bottom:16px; gap:12px; flex-wrap:wrap;">
-        <div class="card-title" style="margin-bottom:0;">Aktivitas User Terbaru</div>
-        @if(isset($activityLogs) && method_exists($activityLogs, 'total'))
-            <div class="table-meta">
-                Menampilkan
-                <strong>{{ $activityLogs->firstItem() ?? 0 }}</strong>
-                sampai
-                <strong>{{ $activityLogs->lastItem() ?? 0 }}</strong>
-                dari
-                <strong>{{ $activityLogs->total() ?? 0 }}</strong>
-                aktivitas
-            </div>
-        @endif
+<div class="card" id="aktivitas-user">
+
+    <div style="
+        display:flex;
+        align-items:center;
+        justify-content:space-between;
+        margin-bottom:16px;
+        gap:12px;
+        flex-wrap:wrap;
+    ">
+        <div class="card-title" style="margin-bottom:0;">
+            Aktivitas User Terbaru
+        </div>
+
+        <div class="table-meta">
+            Menampilkan
+            <strong>{{ $activityLogs->firstItem() ?? 0 }}</strong>
+            sampai
+            <strong>{{ $activityLogs->lastItem() ?? 0 }}</strong>
+            dari
+            <strong>{{ $activityLogs->total() ?? 0 }}</strong>
+            aktivitas
+        </div>
     </div>
+
     <table>
         <thead>
             <tr>
@@ -135,34 +145,95 @@
                 <th>IP</th>
             </tr>
         </thead>
+
         <tbody>
-            @forelse($activityLogs ?? [] as $log)
+
+            @forelse($activityLogs as $log)
+
                 <tr>
-                    <td>{{ $log->created_at->format('d/m/Y H:i') }}</td>
+
+                    <td>
+                        {{ $log->created_at->format('d/m/Y H:i') }}
+                    </td>
+
                     <td>
                         {{ $log->user?->name ?? 'User terhapus' }}
+
                         @if($log->user?->role)
-                            <span class="badge badge-blue">{{ $log->user->role }}</span>
+                            <span class="badge badge-blue">
+                                {{ $log->user->role }}
+                            </span>
                         @endif
                     </td>
-                    <td>{{ $log->description }}</td>
-                    <td>{{ $log->ip_address ?? '-' }}</td>
+
+                    <td>
+                        {{ $log->description }}
+                    </td>
+
+                    <td>
+                        {{ $log->ip_address ?? '-' }}
+                    </td>
+
                 </tr>
+
             @empty
+
                 <tr>
                     <td colspan="4" style="text-align:center;">
                         Belum ada aktivitas user.
                     </td>
                 </tr>
+
             @endforelse
+
         </tbody>
     </table>
-    @if(isset($activityLogs) && method_exists($activityLogs, 'hasPages') && $activityLogs->hasPages())
-        <div style="margin-top:20px; display:flex; justify-content:center;">
-            {{ $activityLogs->fragment('aktivitas-user')->links() }}
+
+    {{-- PAGINATION --}}
+    @if($activityLogs->hasPages())
+
+        <div class="pagination-dashboard">
+
+            @if($activityLogs->onFirstPage())
+                <span class="disabled">&lt;</span>
+            @else
+                <a href="{{ $activityLogs->previousPageUrl() }}#aktivitas-user">
+                    &lt;
+                </a>
+            @endif
+
+            @for($page = 1; $page <= $activityLogs->lastPage(); $page++)
+
+                @if($page == $activityLogs->currentPage())
+
+                    <span class="active">
+                        {{ $page }}
+                    </span>
+
+                @else
+
+                    <a href="{{ $activityLogs->url($page) }}#aktivitas-user">
+                        {{ $page }}
+                    </a>
+
+                @endif
+
+            @endfor
+
+            @if($activityLogs->hasMorePages())
+                <a href="{{ $activityLogs->nextPageUrl() }}#aktivitas-user">
+                    &gt;
+                </a>
+            @else
+                <span class="disabled">&gt;</span>
+            @endif
+
         </div>
+
     @endif
+
 </div>
+
 @endif
 @endsection
 

@@ -42,18 +42,32 @@
             </div>
         </div>
 
-        @if($kejadian->foto_url)
+        @if($kejadian->foto)
         <div class="card">
             <div class="card-title">Foto Dokumentasi</div>
-            <img src="{{ $kejadian->foto_url }}" alt="Foto Kejadian"
-                style="width:100%; border-radius:8px; object-fit:cover; max-height:320px;">
+
+                <div style="display:flex; justify-content:center; margin-top:15px;">
+                    <img src="{{ asset('storage/' . $kejadian->foto) }}"
+                        alt="Foto Kejadian"
+                        style="
+                            width:100%;
+                            max-width:450px;
+                            height:250px;
+                            object-fit:cover;
+                            border-radius:12px;
+                            border:1px solid #ddd;
+                            box-shadow:0 2px 8px rgba(0,0,0,0.1);
+                        ">
+                </div>
+            </div>
+            @else
+            <div class="card" style="text-align:center; padding:32px; color:var(--text-light);">
+                <div style="font-size:13px; font-weight:600">
+                    Tidak ada foto dokumentasi
+                </div>
+            </div>
+            @endif
         </div>
-        @else
-        <div class="card" style="text-align:center; padding:32px; color:var(--text-light);">
-            <div style="font-size:13px; font-weight:600">Tidak ada foto dokumentasi</div>
-        </div>
-        @endif
-    </div>
 
     <div>
         <div class="card">
